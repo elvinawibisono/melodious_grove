@@ -16,22 +16,20 @@ document.addEventListener('DOMContentLoaded', function () {
             storyElement.innerHTML += text.charAt(index);
             index++;
             setTimeout(() => typeWriterEffect(text, index), 50); // Adjust the typing speed here
-        }
-        else {
+        } else {
             isTyping = false;  // Reset the flag when typing is done
-            
         }
     }
-    
+
     document.addEventListener('keydown', function (event) {
+        if (currentTextIndex === storyTexts.length) {
+            hiddenButton.classList.remove('hidden'); // Show the hidden button
+        }
         if (event.key === 'Enter' && !isTyping && currentTextIndex < storyTexts.length) {
             // Clear existing text before starting the typing effect
             storyElement.innerHTML = '';
             typeWriterEffect(storyTexts[currentTextIndex], 0);
-            currentTextIndex = (currentTextIndex + 1);
-            if (currentTextIndex === storyTexts.length) {
-                hiddenButton.classList.remove('hidden'); // Show the hidden button
-            }
+            currentTextIndex++;
         }
     });
 
