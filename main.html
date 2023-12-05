@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Load Page Example</title>
+</head>
+<body>
+
+  <h1>Melodious Grove</h1>
+
+  <!-- Create a button with an id for JavaScript to reference -->
+  <button id="minigame1">Minigame 1</button>
+
+  <!-- Create a button with an id for JavaScript to reference -->
+  <button id="minigame2">Minigame 2</button>
+
+  <!-- Create a button with an id for JavaScript to reference -->
+  <button id="minigame3">Minigame 3</button>
+
+
+
+  <script>
+    // Get the button element by its id
+    var gameButton1 = document.getElementById("minigame1");
+
+    // Add a click event listener to the button
+    gameButton1.addEventListener("click", function() {
+      // Change the location to the URL of the new page
+      window.location.href = "minigame1.html";
+    });
+
+
+
+    // Get the button element by its id
+    var gameButton2 = document.getElementById("minigame2");
+
+    // Add a click event listener to the button
+    gameButton2.addEventListener("click", function() {
+      // Change the location to the URL of the new page
+      window.location.href = "minigame2.html";
+    });
+
+
+
+
+
+    // Get the button element by its id
+    var gameButton3 = document.getElementById("minigame3");
+
+    // Add a click event listener to the button
+    gameButton3.addEventListener("click", function() {
+      // Change the location to the URL of the new page
+      window.location.href = "minigame3.html";
+    });
+  </script>
+
+</body>
+<script src="main.js"></script>
+
+
+</html>
