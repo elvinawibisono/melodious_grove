@@ -1,0 +1,17 @@
+All of the sprites in the Himeko Sutori Sprite Share zip file are free
+to use with attribution. You may use these sprites for free in commercial
+and non-commercial projects. In any project you must include the
+following attributions:
+
+Half-Kaizer sprite template created by Showkaizer.
+Additional Half-Kazier poses by Aleesa Tana.
+Armor, weapon, shield, helmet, hair, skeleton, zombie, demon, fairy,
+mecha, wolf, boar, pumpkin, turkey, slime, skullbird, dragon, cactus, and
+other sprites are from Himeko Sutori and Septaroad Voyager by Rockwell
+Studios, LLC.
+
+You may edit these files and share your edits if you also include the
+above attributions. Please do not re-post the original files.
+
+None of these sprites are based on any RPG Maker product and may be used
+in any game engine.
