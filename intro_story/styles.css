@@ -1,0 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Press Start 2P', sans-serif; 
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.game-container {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+}
+
+.character-image {
+    width: 500px;
+    margin-right: 20px; /* Add margin for separation */
+}
+
+.character-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.story-container {
+    display: flex;
+    flex-direction: column; /* Stack columns vertically */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+    width: 600px; /* Set a fixed width */
+}
+
+.story {
+    font-size: 18px;
+    white-space: pre-wrap; /* Preserve line breaks */
+    border-right: 2px solid #000; /* Blinking cursor effect */
+    overflow: hidden;
+    line-height: 1.5;
+    flex-shrink: 0; /* Prevent the story container from shrinking */
+}
+
+/* Add this style to your existing CSS */
+.hidden {
+    display: none;
+}
+
+#hiddenButton {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
