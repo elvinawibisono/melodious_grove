@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title> Minigame 3 </title>
+
+        <style>
+            #keyboard{
+                position: relative;
+                top: 0;
+                left: 0;
+                width: 1500px;
+                height: 700px;
+            }
+            #dot, #dot2, #dot3, #dot4, #dot5, #dot6, #dot7, #dot8, #dot9, #dot10, #dot11, #dot12, #dot13, #dot14, #dot15, #dot16, #dot17, #dot18, #dot19, #dot20, #dot21, #dot22, #dot23, #dot24 {
+                display: none;
+                position: absolute;
+                top: 690px;
+                left: 25px;
+                width: 75px;
+                height: 75px;
+            }
+
+              /* Styles for the overlay background */
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black overlay */
+            }
+
+            /* Styles for the modal */
+            .modal {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 20px;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                z-index: 2;
+            }
+
+            /* Style to close button */
+            .welcome-close-btn {
+                cursor: pointer;
+            }
+            .instruction-close-btn {
+                cursor: pointer;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <!-- Button to trigger the overlay -->
+        <button onclick="openWelcomeModal()">Welcome</button>
+
+        <button onclick="openInstructionModal()">Instructions</button>
+
+        <!-- Overlay background -->
+        <div id="welcomeOverlay" class="overlay"></div>
+
+        <!-- Modal content -->
+        <div id="welcomeModal" class="modal">
+            <span class="welcome-close-btn" onclick="closeWelcomeModal()">&times;</span> <!-- &times; is an "x" character for close button -->
+            <h1>Welcome</h1>
+            <p>Welcome, young one. It seems you have made it to the third minigame; however, you must open these three boxes. Each box opens up when you play a tune. Using your keyboard, you must play the tunes to open each box. I will play you a sequence of notes, and you must play it back in the exact order. Play all 3 sucessfully, and I can give you the last three ingredients you need! </p>
+        </div>
+
+        <!-- Overlay background -->
+        <div id="instructionOverlay" class="overlay"></div>
+
+        <div id="instructionModal" class="modal">
+            <span class="instruction-close-btn" onclick="closeInstructionModal()">&times;</span> <!-- &times; is an "x" character for close button -->
+            <h1>Instructions</h1>
+        </div>
+
+
+        <select name="waveform" id="waveform">
+            <option value="sine">sine</option>
+            <option value="sawtooth">sawtooth</option>
+            <option value="square">square</option>
+            <option value="triangle">triangle</option>
+        </select>
+        <p> Go ahead and play the piano! </p>
+
+        <img id="keyboard" src="keyboard2.png" alt="Keyboard" width="1500" height="700">
+        <img id="dot" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot2" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot3" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot4" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot5" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot6" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot7" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot8" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot9" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot10" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot11" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot12" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot13" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot14" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot15" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot16" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot17" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot18" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot19" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot20" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot21" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot22" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot23" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+        <img id="dot24" src="red_dot.webp" alt="Keyboard" width="75" height="75">
+    </body>
+
+    <script>
+        // Function to open the modal and overlay
+        function openWelcomeModal() {
+          document.getElementById("welcomeOverlay").style.display = "block";
+          document.getElementById("welcomeModal").style.display = "block";
+        }
+    
+        // Function to close the modal and overlay
+        function closeWelcomeModal() {
+          document.getElementById("welcomeOverlay").style.display = "none";
+          document.getElementById("welcomeModal").style.display = "none";
+        }
+
+        // Function to open the modal and overlay
+        function openInstructionModal() {
+          document.getElementById("instructionOverlay").style.display = "block";
+          document.getElementById("instructionModal").style.display = "block";
+        }
+    
+        // Function to close the modal and overlay
+        function closeInstructionModal() {
+          document.getElementById("instructionOverlay").style.display = "none";
+          document.getElementById("instructionModal").style.display = "none";
+        }
+      </script>
+
+    
+    <script src="minigame3.js"> </script>
+
+</html>
