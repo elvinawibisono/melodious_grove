@@ -51,3 +51,11 @@
   <script src="script.js"></script>
 </body>
 </html>
+
+
+def func(arr,start,end):
+  if end > start:
+    mid = (start + end)/2
+    ans += func(arr, start, mid)
+    ans += func(arr, mid+1, end)
+    return ans
