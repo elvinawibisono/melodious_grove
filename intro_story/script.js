@@ -1,6 +1,23 @@
 document.addEventListener('DOMContentLoaded', function () {
     const storyElement = document.getElementById('story');
     const hiddenButton = document.getElementById('hiddenButton');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const toggleButton = document.getElementById('toggleButton');
+
+    function toggleMute() {
+        backgroundMusic.muted = !backgroundMusic.muted;
+        updateButtonAppearance();
+    }
+
+    function updateButtonAppearance() {
+        const isMuted = backgroundMusic.muted;
+        toggleButton.src = isMuted ? '../assets/icon-muted-white.png' : '../assets/icon-unmuted-white.png';
+    }
+
+    toggleButton.addEventListener('click', toggleMute);
+    updateButtonAppearance();
+
+
 
     const storyTexts = ["Hi, my name is Ari!", 
                         "My grandma is dying and I need your help to save her.", 
