@@ -1,0 +1,13 @@
+#pitchBar {
+    width: 100%;
+    height: 20px;
+    background-color: #ddd;
+    position: relative;
+  }
+
+  #pitchIndicator {
+    height: 100%;
+    background-color: #ff0000;
+    position: absolute;
+    width: 0;
+  }
