@@ -182,6 +182,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     function generatePattern() {
         var data = generateRandomNotes();
+
+        // Reinitalize everything
+        userNotes = [];
+        generatedNotes = [];
+        countUserPlayed = 0;
+
+
         console.log("Notes generated: ", data)
         genAudio(data);
     }
@@ -200,11 +207,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
         else{
             var level_header = document.getElementById("level_text");
+            //console.log(level_header)
             // Change the text content
-            level_header.textContent = "Level " + level;
 
 
             level += 1;
+            level_header.textContent = "Level " + level;
             generatedNotes = [];
             countUserPlayed = 0;
             userNotes = [];
