@@ -23,7 +23,7 @@ body {
 
 .character-image {
     width: 500px;
-    margin-right: 20px; /* Add margin for separation */
+    margin-right: 20px; 
 }
 
 .character-image img {
@@ -33,24 +33,23 @@ body {
 
 .story-container {
     display: flex;
-    flex-direction: column; /* Stack columns vertically */
+    flex-direction: column; 
     align-items: center;
     justify-content: center;
     padding: 20px;
-    overflow-y: auto; /* Enable vertical scrolling if needed */
-    width: 600px; /* Set a fixed width */
+    overflow-y: auto; 
+    width: 600px; 
 }
 
 .story {
     font-size: 18px;
-    white-space: pre-wrap; /* Preserve line breaks */
-    border-right: 2px solid #000; /* Blinking cursor effect */
+    white-space: pre-wrap; 
+    border-right: 2px solid #000;
     overflow: hidden;
     line-height: 1.5;
-    flex-shrink: 0; /* Prevent the story container from shrinking */
+    flex-shrink: 0; 
 }
 
-/* Add this style to your existing CSS */
 .hidden {
     display: none;
 }
@@ -59,7 +58,7 @@ body {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 150px; /* Set the desired width */
-    height: 50px; /* Set the desired height */
-    font-size: 16px; /* Set the desired font size */
+    width: 150px; 
+    height: 50px; 
+    font-size: 16px; 
 }
