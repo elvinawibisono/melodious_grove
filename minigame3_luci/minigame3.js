@@ -1,8 +1,19 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const waveform = document.getElementById("waveform");
+    var audioCtx2;
+    //const waveform = document.getElementById("waveform");
     //const dot = document.getElementById('dot');
+
+    var audioCtx;
+    var osc;
+    var timings;
+    var generatedNotes = [];
+    const playButton = document.getElementById('playButton');
+
+    var countUserPlayed = 0;
+    var userNotes = [];
+
+    var level = 1;
 
     const keyboardFrequencyMap = {
         '90': 261.625565300598634,  //Z - C
@@ -29,6 +40,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
         '89': 880.000000000000000,  //Y - A
         '55': 932.327523036179832, //7 - A#
         '85': 987.766602512248223,  //U - B
+    }
+
+    const indexToFreq = {
+        1: '90',  //Z - C
+        2: '83', //S - C#
+        3: '88',  //X - D
+        4: '68', //D - D#
+        5: '67',  //C - E
+        6: '86',  //V - F
+        7: '71', //G - F#
+        8: '66',  //B - G
+        9: '72', //H - G#
+        10: '78',  //N - A
+        11: '74', //J - A#
+        12: '77',  //M - B
+        13: '81',  //Q - C
+        14: '50', //2 - C#
+        15: '87',  //W - D
+        16: '51', //3 - D#
+        17: '69',  //E - E
+        18: '82',  //R - F
+        19: '53', //5 - F#
+        20: '84',  //T - G
+        21: '54', //6 - G#
+        22: '89',  //Y - A
+        23: '55', //7 - A#
+        24: '85',  //U - B
     }
 
     const positionMap = {
@@ -90,22 +128,201 @@ document.addEventListener("DOMContentLoaded", function(event) {
     activeOscillators = {}
     activeGains = {}
 
+
+    //Generation code
+
+    // function stopAudio() {
+    //     audioCtx = new (window.AudioContext || window.webkitAudioContext)
+    //     osc = audioCtx.createOscillator();
+    //     timings = audioCtx.createGain();
+    //     timings.gain.value = 0;
+    //     osc.connect(timings).connect(audioCtx.destination);
+    //     osc.start();
+    //     scheduleAudio()
+    // }
+
+    // function releaseStep(key){
+    //     //const releaseTime = audioCtx.currentTime + 0.1; 
+
+    //     activeGains[key].gain.cancelScheduledValues(audioCtx2.currentTime);
+    //     activeGains[key].gain.exponentialRampToValueAtTime(0.001, audioCtx2.currentTime + 0.1);
+    //     activeGains[key].gain.setTargetAtTime(0.001, audioCtx2.currentTime, 0.01); 
+
+    //     setTimeout(function(){
+    //         activeOscillators[key].stop(audioCtx2.currentTime + 0.2); 
+    //         delete activeOscillators[key];
+    //         delete activeGains[key]; 
+    //     }, 100)
+    // }
+
+    // function initAudio() {
+    //     audioCtx2 = new (window.AudioContext || window.webkitAudioContext)
+    //     audioCtx = new (window.AudioContext || window.webkitAudioContext)
+    //     osc = audioCtx.createOscillator();
+    //     timings = audioCtx.createGain();
+    //     timings.gain.value = 0;
+    //     osc.connect(timings).connect(audioCtx.destination);
+    //     osc.start();
+    //     scheduleAudio();
+    // }
+
+
+
+    // function scheduleAudio() {
+    //     let timeElapsedSecs = 0;
+    //     console.log("here check")
+    //     generatedNotes.forEach(noteData => {
+    //         console.log("HERE")
+    //         timings.gain.setTargetAtTime(1, audioCtx.currentTime + timeElapsedSecs, 0.01)
+    //         osc.frequency.setTargetAtTime(noteData, audioCtx.currentTime + timeElapsedSecs, 0.01)
+    //         timeElapsedSecs += 1;
+    //         timings.gain.setTargetAtTime(0, audioCtx.currentTime + timeElapsedSecs, 0.01)
+    //         timeElapsedSecs += 0.2; //rest between notes
+    //     });
+    //     //scheduleAudio();
+    //     //setTimeout(scheduleAudio, timeElapsedSecs * 1000);
+    // }
+
+    function initAudio() {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        audioCtx2 = new (window.AudioContext || window.webkitAudioContext)();
+        osc = audioCtx.createOscillator();
+        const wave = "sine";
+        osc.type = wave; //choose your favorite waveform
+        timings = audioCtx.createGain();
+        timings.gain.value = 0;
+        osc.connect(timings).connect(audioCtx.destination);
+        osc.start();
+        
+        // Assuming user interaction triggers the audio
+        document.addEventListener('click', function () {
+            //playNoteTest(keyboardFrequencyMap['67']);
+            scheduleAudio();
+
+        });
+    }
+    
+    function scheduleAudio() {
+        let timeElapsedSecs = 0;
+        generatedNotes.forEach(noteData => {
+            osc.frequency.setValueAtTime(keyboardFrequencyMap[noteData], audioCtx.currentTime + timeElapsedSecs, 0.01);
+            timings.gain.setTargetAtTime(1, audioCtx.currentTime + timeElapsedSecs, 0.01);
+            //osc.frequency.setValueAtTime(noteData, audioCtx.currentTime + timeElapsedSecs, 0.01);
+            timeElapsedSecs += 1;
+            timings.gain.setTargetAtTime(0, audioCtx.currentTime + timeElapsedSecs, 0.01);
+            timeElapsedSecs += 0.2; // rest between notes
+        });
+    }
+
+    function generateRandomNotes() {
+        numNotes = 5;
+        if(level == 2){
+            numNotes = 10;
+        }
+        if(level == 3){
+            numNotes = 24;
+        }
+        notes = []
+        for (var i = 0; i < 7; i++) {
+            var randomValue = Math.floor(Math.random() * (numNotes)) + 1;
+            notes.push(indexToFreq[randomValue]);
+          }
+        return ['67', '67', '67', '67','67','67','67']
+        return notes;
+    }
+
+    function genAudio(data) {
+        generatedNotes = data;
+    }
+
+    function generatePattern() {
+        var data = generateRandomNotes();
+        console.log("Notes generated: ", data)
+        genAudio(data);
+    }
+
+    playButton.addEventListener('click', function () {
+        if (!audioCtx) {
+            initAudio();
+        }
+        generatePattern();
+    });
+
+    function nextLevel(){
+
+        if(level >= 3){
+            gameWin();
+        }
+        else{
+            var level_header = document.getElementById("level_text");
+            // Change the text content
+            level_header.textContent = "Level " + level;
+
+
+            level += 1;
+            generatedNotes = [];
+            countUserPlayed = 0;
+            userNotes = [];
+        }
+    }
+    // end generation
+
+    function retryLevel(){
+        return;
+    }
+
+
     function keyDown(event) {
         const key = (event.detail || event.which).toString();
-        if (keyboardFrequencyMap[key] && !activeOscillators[key]) {
-            const dot = dots[key];
-            console.log(dot.style.left);
-            dot.style.top = "690px";
-            if(positionMap[key]%1 != 0){
-                dot.style.top = "405px";
-            }
-            value = 25 + (positionMap[key] * 107)
-            dot.style.left = value + "px";
-            console.log("positionMap[key]", positionMap[key])
-            dot.style.display = 'block';
-            playNote(key);
 
+        countUserPlayed += 1
+        userNotes.push(key)
+        if(countUserPlayed >= 7){
+            console.log("User notes: ", userNotes)
+            var eval = evaluateGame();
+            if(eval == true){
+                nextLevel();
+            }
+            else{
+                retryLevel();
+            }
         }
+        if(countUserPlayed <= 7){
+
+            if (keyboardFrequencyMap[key] && !activeOscillators[key]) {
+                const dot = dots[key];
+                console.log(dot.style.left);
+                dot.style.top = "690px";
+                if(positionMap[key]%1 != 0){
+                    dot.style.top = "405px";
+                }
+                value = 25 + (positionMap[key] * 107)
+                dot.style.left = value + "px";
+                console.log("positionMap[key]", positionMap[key])
+                dot.style.display = 'block';
+                playNote(key);
+
+            }
+        }
+    }
+
+    function evaluateGame(){
+        var same = true;
+
+        console.log("Generated notes: ", generatedNotes)
+        console.log("User note: ", userNotes)
+        for(let i = 0; i < generatedNotes.length; i++){
+            if(generatedNotes[i] != userNotes[i]){
+                same = false;
+            }
+        }
+        if(same == true){
+            console.log("You win!")
+        }
+        else{
+            console.log("You lose.")
+        }
+        return same
     }
 
     function keyUp(event) {
@@ -123,20 +340,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
             releaseStep(key);
         }
         
-        const osc = audioCtx.createOscillator();
-        const wave = waveform.value;
+        const osc = audioCtx2.createOscillator();
+        const wave = "sine";
         osc.type = wave //choose your favorite waveform
 
         //Follow the instructions here
-        const gainNode = audioCtx.createGain(); //this will control the volume of all notes
-        osc.frequency.setValueAtTime(keyboardFrequencyMap[key], audioCtx.currentTime)
+        const gainNode = audioCtx2.createGain(); //this will control the volume of all notes
+        osc.frequency.setValueAtTime(keyboardFrequencyMap[key], audioCtx2.currentTime)
 
-        gainNode.gain.setValueAtTime(0.001, audioCtx.currentTime)
-        osc.connect(gainNode).connect(audioCtx.destination);
+        gainNode.gain.setValueAtTime(0.001, audioCtx2.currentTime)
+        osc.connect(gainNode).connect(audioCtx2.destination);
         
 
         //gainNode.gain.exponentialRampToValueAtTime(0.5, audioCtx.currentTime + 0.001);
-        gainNode.gain.setTargetAtTime(0.4, audioCtx.currentTime + 0.01, 0.2);
+        gainNode.gain.setTargetAtTime(0.4, audioCtx2.currentTime + 0.01, 0.2);
 
         //
         //osc.connect(audioCtx.destination)
@@ -144,26 +361,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
         activeOscillators[key] = osc;
         activeGains[key] = gainNode;
         //
-        
-        length = object.keys.activeGains[key].length + 1;
+        console.log(activeGains[key])
+        length = Object.keys.activeGains[key].length + 1;
         Object.keys(activeGains).forEach(function(key){
-            activeGains[key].gain.setTargetAtTime(0.4 / length,audioCtx.currentTime + 0.01,0.2); 
+            activeGains[key].gain.setTargetAtTime(0.4 / length,audioCtx2.currentTime + 0.01,0.2); 
         })
         
-        gainNode.gain.exponentialRampToValueAtTime(0.5/ length,audioCtx.currentTime + 0.02); 
-        gainNode.gain.setTargetAtTime(0.4/ length,audioCtx.currentTime + 0.01,0.2); 
+        gainNode.gain.exponentialRampToValueAtTime(0.5/ length,audioCtx2.currentTime + 0.02); 
+        gainNode.gain.setTargetAtTime(0.4/ length,audioCtx2.currentTime + 0.01,0.2); 
     }
 
 
     function releaseStep(key){
         //const releaseTime = audioCtx.currentTime + 0.1; 
 
-        activeGains[key].gain.cancelScheduledValues(audioCtx.currentTime);
-        activeGains[key].gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-        activeGains[key].gain.setTargetAtTime(0.001, audioCtx.currentTime, 0.01); 
+        activeGains[key].gain.cancelScheduledValues(audioCtx2.currentTime);
+        activeGains[key].gain.exponentialRampToValueAtTime(0.001, audioCtx2.currentTime + 0.1);
+        activeGains[key].gain.setTargetAtTime(0.001, audioCtx2.currentTime, 0.01); 
 
         setTimeout(function(){
-            activeOscillators[key].stop(audioCtx.currentTime + 0.2); 
+            activeOscillators[key].stop(audioCtx2.currentTime + 0.2); 
             delete activeOscillators[key];
             delete activeGains[key]; 
         }, 100)
