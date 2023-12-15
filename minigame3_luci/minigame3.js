@@ -128,61 +128,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     activeOscillators = {}
     activeGains = {}
 
-
-    //Generation code
-
-    // function stopAudio() {
-    //     audioCtx = new (window.AudioContext || window.webkitAudioContext)
-    //     osc = audioCtx.createOscillator();
-    //     timings = audioCtx.createGain();
-    //     timings.gain.value = 0;
-    //     osc.connect(timings).connect(audioCtx.destination);
-    //     osc.start();
-    //     scheduleAudio()
-    // }
-
-    // function releaseStep(key){
-    //     //const releaseTime = audioCtx.currentTime + 0.1; 
-
-    //     activeGains[key].gain.cancelScheduledValues(audioCtx2.currentTime);
-    //     activeGains[key].gain.exponentialRampToValueAtTime(0.001, audioCtx2.currentTime + 0.1);
-    //     activeGains[key].gain.setTargetAtTime(0.001, audioCtx2.currentTime, 0.01); 
-
-    //     setTimeout(function(){
-    //         activeOscillators[key].stop(audioCtx2.currentTime + 0.2); 
-    //         delete activeOscillators[key];
-    //         delete activeGains[key]; 
-    //     }, 100)
-    // }
-
-    // function initAudio() {
-    //     audioCtx2 = new (window.AudioContext || window.webkitAudioContext)
-    //     audioCtx = new (window.AudioContext || window.webkitAudioContext)
-    //     osc = audioCtx.createOscillator();
-    //     timings = audioCtx.createGain();
-    //     timings.gain.value = 0;
-    //     osc.connect(timings).connect(audioCtx.destination);
-    //     osc.start();
-    //     scheduleAudio();
-    // }
-
-
-
-    // function scheduleAudio() {
-    //     let timeElapsedSecs = 0;
-    //     console.log("here check")
-    //     generatedNotes.forEach(noteData => {
-    //         console.log("HERE")
-    //         timings.gain.setTargetAtTime(1, audioCtx.currentTime + timeElapsedSecs, 0.01)
-    //         osc.frequency.setTargetAtTime(noteData, audioCtx.currentTime + timeElapsedSecs, 0.01)
-    //         timeElapsedSecs += 1;
-    //         timings.gain.setTargetAtTime(0, audioCtx.currentTime + timeElapsedSecs, 0.01)
-    //         timeElapsedSecs += 0.2; //rest between notes
-    //     });
-    //     //scheduleAudio();
-    //     //setTimeout(scheduleAudio, timeElapsedSecs * 1000);
-    // }
-
     function initAudio() {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         audioCtx2 = new (window.AudioContext || window.webkitAudioContext)();
@@ -278,7 +223,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         countUserPlayed += 1
         userNotes.push(key)
         if(countUserPlayed >= 7){
-            console.log("User notes: ", userNotes)
             var eval = evaluateGame();
             if(eval == true){
                 nextLevel();
@@ -291,14 +235,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
             if (keyboardFrequencyMap[key] && !activeOscillators[key]) {
                 const dot = dots[key];
-                console.log(dot.style.left);
                 dot.style.top = "690px";
                 if(positionMap[key]%1 != 0){
                     dot.style.top = "405px";
                 }
                 value = 25 + (positionMap[key] * 107)
                 dot.style.left = value + "px";
-                console.log("positionMap[key]", positionMap[key])
                 dot.style.display = 'block';
                 playNote(key);
 
@@ -330,7 +272,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if (keyboardFrequencyMap[key] && activeOscillators[key]) {
             releaseStep(key);
             const dot = dots[key];
-            console.log("here!");
             dot.style.display = 'none';
         }
     }
@@ -361,8 +302,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         activeOscillators[key] = osc;
         activeGains[key] = gainNode;
         //
-        console.log(activeGains[key])
-        length = Object.keys.activeGains[key].length + 1;
+        length = Object.keys(activeGains[key]).length + 1;
         Object.keys(activeGains).forEach(function(key){
             activeGains[key].gain.setTargetAtTime(0.4 / length,audioCtx2.currentTime + 0.01,0.2); 
         })
