@@ -8,7 +8,15 @@ const pitchBar = document.getElementById('pitchBar');
 const pitchIndicator = document.getElementById('pitchIndicator');
 let isMicrophoneEnabled = false;
 var smoothedPitch = 0.0;
-  const smoothingFactor = 0.1;
+const smoothingFactor = 0.1;
+
+const targetPitchMin = Math.floor(Math.random() * (1000 - 300) + 200);
+const targetPitchMax = targetPitchMin + 300;
+
+let greenBarDuration = 0;
+let shouldUpdateBar = true; // Flag to control whether the bar should be updated
+
+console.log(targetPitchMin, ' ', targetPitchMax);
 
 function toggleMicrophone() {
   if (!isMicrophoneEnabled) {
@@ -18,13 +26,13 @@ function toggleMicrophone() {
   }
 }
 
+function goToNextPage() {
+  window.location.href = '../minigame3_luci/minigame3.html';
+}
 
 function startPitchDetection() {
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then((stream) => {
-        /* https://stackoverflow.com/questions/16949768/how-can-i-reduce-the-noise-of-a-microphone-input-with-the-web-audio-api */
-
-      // Create a notch filter to suppress specific frequencies (adjust as needed)
       filter = audioCtx.createBiquadFilter();
       filter.Q.value = 8.30;
       filter.frequency.value = 100;
@@ -32,7 +40,7 @@ function startPitchDetection() {
       filter.type = 'bandpass';
 
       microphoneStream = audioCtx.createMediaStreamSource(stream);
-    microphoneStream.connect(filter);
+      microphoneStream.connect(filter);
       filter.connect(analyserNode);
 
       audioData = new Float32Array(analyserNode.fftSize);
@@ -43,10 +51,9 @@ function startPitchDetection() {
 
         let pitch = getAutocorrolatedPitch();
 
-        // Update the pitch bar width based on the calculated pitch
         updatePitchBarWidth(pitch);
-      }, 50);
-      
+      }, 100);
+
       isMicrophoneEnabled = true;
       document.getElementById('microphoneButton').textContent = 'Disable Microphone';
     })
@@ -57,6 +64,7 @@ function startPitchDetection() {
 
 function stopMicrophone() {
   if (microphoneStream) {
+    shouldUpdateBar = false; // Disable bar updates
     microphoneStream.disconnect();
     isMicrophoneEnabled = false;
     document.getElementById('microphoneButton').textContent = 'Toggle Microphone';
@@ -92,32 +100,33 @@ function getAutocorrolatedPitch() {
   return audioCtx.sampleRate / maximaMean;
 }
 
+function isPitchInRange(pitch) {
+  return pitch >= targetPitchMin && pitch <= targetPitchMax;
+}
+
 function updatePitchBarWidth(pitch) {
   // Normalize the pitch value to fit within the bar's range
-  if (!isNaN(pitch) && !isNaN(smoothedPitch)) {
+  if (shouldUpdateBar && !isNaN(pitch) && !isNaN(smoothedPitch)) {
     smoothedPitch = smoothingFactor * pitch + (1 - smoothingFactor) * smoothedPitch;
   }
+  const normalizedPitch = Math.max(0, Math.min(1200, smoothedPitch));
 
-    // Normalize the smoothed pitch value to fit within the bar's range
-    const normalizedPitch = Math.max(0, Math.min(1200, smoothedPitch));
+  console.log('Smoothed Pitch: ', smoothedPitch, 'Pitch: ', pitch);
 
-    console.log('Smoothed Pitch: ', smoothedPitch, 'Pitch: ', pitch);
+  if (isPitchInRange(smoothedPitch)) {
+    pitchIndicator.style.backgroundColor = '#00ff00'; // Green
+    greenBarDuration += 0.1;
+  } else {
+    pitchIndicator.style.backgroundColor = '#ff0000'; // Red
+    greenBarDuration = 0;
+  }
 
-    // Update the width of the pitch indicator
+  if (greenBarDuration >= 3) {
+    stopMicrophone();
+    pitchIndicator.style.backgroundColor = '#0000ff'; // Blue
+  } else {
     pitchIndicator.style.width = `${(normalizedPitch / 1200) * 100}%`;
-//   var normalizedPitch = 0;
-
-//   if (pitch < 1000) {
-//     normalizedPitch = Math.max(0, pitch)
-//   }
-//   console.log('Pitch: ', pitch)
-//   // Update the width of the pitch indicator
-//   pitchIndicator.style.width = `${(normalizedPitch / 1000) * 100}%`;
+  }
 }
 
-// Start the pitch detection when the page loads
 startPitchDetection();
-
-function goToNextPage() {
-  window.location.href = 'minigame3_luci/minigame3.html';
-}
