@@ -32,30 +32,29 @@ document.addEventListener('DOMContentLoaded', function () {
             isTyping = true;
             storyElement.innerHTML += text.charAt(index);
             index++;
-            setTimeout(() => typeWriterEffect(text, index), 50); // Adjust the typing speed here
+            setTimeout(() => typeWriterEffect(text, index), 50);
         } else {
-            isTyping = false;  // Reset the flag when typing is done
+            isTyping = false; 
         }
     }
 
     document.addEventListener('keydown', function (event) {
         if (currentTextIndex === storyTexts.length) {
-            hiddenButton.classList.remove('hidden'); // Show the hidden button
+            hiddenButton.classList.remove('hidden'); // show hidden button
         }
         if (event.key === 'Enter' && !isTyping && currentTextIndex < storyTexts.length) {
-            // Clear existing text before starting the typing effect
+            // clear existing text before starting the typing effect
             storyElement.innerHTML = '';
             typeWriterEffect(storyTexts[currentTextIndex], 0);
             currentTextIndex++;
         }
     });
 
-    // Start the typing effect when the page loads
+    // start typing when the page loads
     typeWriterEffect(storyTexts[currentTextIndex], 0);
     currentTextIndex = (currentTextIndex + 1) % storyTexts.length;
 });
 
 function handleHiddenButtonClick() {
-    // Handle the hidden button click, e.g., proceed to the next part of your game
     window.location.href = '../minigame1.html';
 }
