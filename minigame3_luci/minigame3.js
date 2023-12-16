@@ -10,6 +10,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var generatedNotes = [];
     const playButton = document.getElementById('playButton');
 
+    const retryButton = document.getElementById('retryButton');
+
+    var canPlay = false;
+
+    
+
     var countUserPlayed = 0;
     var userNotes = [];
 
@@ -149,6 +155,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     
     function scheduleAudio() {
         let timeElapsedSecs = 0;
+        
         generatedNotes.forEach(noteData => {
             osc.frequency.setValueAtTime(keyboardFrequencyMap[noteData], audioCtx.currentTime + timeElapsedSecs, 0.01);
             timings.gain.setTargetAtTime(1, audioCtx.currentTime + timeElapsedSecs, 0.01);
@@ -157,12 +164,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
             timings.gain.setTargetAtTime(0, audioCtx.currentTime + timeElapsedSecs, 0.01);
             timeElapsedSecs += 0.2; // rest between notes
         });
+
+        setTimeout(function () {
+            canPlay = true;
+            console.log("canPlay: ", canPlay)
+        }, 1000 * 8);
+
     }
 
     function generateRandomNotes() {
         numNotes = 5;
         if(level == 2){
-            numNotes = 10;
+            numNotes = 12;
         }
         if(level == 3){
             numNotes = 24;
@@ -200,15 +213,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
         generatePattern();
     });
 
+    retryButton.addEventListener('click', function () {
+
+        document.getElementById("retryOverlay").style.display = "none";
+        document.getElementById("retryModal").style.display = "none";
+
+        if (!audioCtx) {
+            initAudio();
+        }
+        generatePattern();
+    });
+
+
+
     function nextLevel(){
 
         if(level >= 3){
-            gameWin();
+            document.getElementById("nextLevelOverlay").style.display = "block";
+            document.getElementById("win").style.display = "block";
         }
         else{
+
+            if(level == 1){
+                document.getElementById("nextLevelOverlay").style.display = "block";
+                document.getElementById("win_level1").style.display = "block";
+            }
+            if(level == 2){
+                document.getElementById("nextLevelOverlay").style.display = "block";
+                document.getElementById("win_level2").style.display = "block";
+            }
+            
             var level_header = document.getElementById("level_text");
-            //console.log(level_header)
-            // Change the text content
 
 
             level += 1;
@@ -216,16 +251,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
             generatedNotes = [];
             countUserPlayed = 0;
             userNotes = [];
+            
         }
     }
     // end generation
 
     function retryLevel(){
-        return;
+        document.getElementById("retryOverlay").style.display = "block";
+        document.getElementById("retryModal").style.display = "block";
     }
 
 
     function keyDown(event) {
+        if(canPlay == false){
+            return
+        }
         const key = (event.detail || event.which).toString();
 
         countUserPlayed += 1
@@ -234,9 +274,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var eval = evaluateGame();
             if(eval == true){
                 nextLevel();
+                canPlay = false;
             }
             else{
                 retryLevel();
+                canPlay = false;
             }
         }
         if(countUserPlayed <= 7){
