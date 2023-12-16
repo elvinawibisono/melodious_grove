@@ -1,0 +1,57 @@
+
+.game-container {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+}
+
+body {
+    margin: 0;
+    font-family: 'Press Start 2P', sans-serif; 
+    background: url('../assets/treasure-chest-cave.avif') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.character-image {
+    width: 500px;
+    margin-right: 20px; 
+}
+
+.character-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.story-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto; 
+    width: 600px; 
+    background-color: green; 
+}
+
+.story {
+    font-size: 18px;
+    white-space: pre-wrap; 
+    border-right: 2px solid #fff;
+    overflow: hidden;
+    line-height: 1.5;
+    flex-shrink: 0; 
+}
+
+.hidden {
+  display: none;
+  
+}
+
+#hiddenButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 150px; 
+  height: 50px; 
+  font-size: 16px; 
+}

@@ -157,6 +157,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let timeElapsedSecs = 0;
         
         generatedNotes.forEach(noteData => {
+
+            setTimeout(function () {
+                showNote(noteData, timeElapsedSecs);
+            }, 1000 * timeElapsedSecs);
+            
+
             osc.frequency.setValueAtTime(keyboardFrequencyMap[noteData], audioCtx.currentTime + timeElapsedSecs, 0.01);
             timings.gain.setTargetAtTime(1, audioCtx.currentTime + timeElapsedSecs, 0.01);
             //osc.frequency.setValueAtTime(noteData, audioCtx.currentTime + timeElapsedSecs, 0.01);
@@ -185,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var randomValue = Math.floor(Math.random() * (numNotes)) + 1;
             notes.push(indexToFreq[randomValue]);
           }
-        return ['67', '67', '67', '67','67','67','67']
+        //return ['67', '67', '67', '67','67','67','67']
         return notes;
     }
 
@@ -204,6 +210,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         console.log("Notes generated: ", data)
         genAudio(data);
+    }
+
+    var endButton = document.getElementById("end-game-button");
+
+    endButton.addEventListener('click', function () {
+        goToNextPage();
+    });
+
+
+    function goToNextPage() {
+        window.location.href = '../outro/outro.html';
     }
 
     playButton.addEventListener('click', function () {
@@ -296,6 +313,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
             }
         }
+    }
+
+    function showNote(key, timeToPlay){
+        if(keyboardFrequencyMap[key]){
+            const dot = dots[key];
+            dot.style.top = "690px";
+            if(positionMap[key]%1 != 0){
+                dot.style.top = "405px";
+            }
+            value = 25 + (positionMap[key] * 107)
+            dot.style.left = value + "px";
+            dot.style.display = 'block';
+
+            setTimeout(function () {
+                dot.style.display = 'none';
+            },  timeToPlay+ 1 * 1000); // Convert seconds to milliseconds
+
+        }
+
     }
 
     function evaluateGame(){
