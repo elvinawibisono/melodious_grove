@@ -3,6 +3,8 @@ var config = {
     type: Phaser.AUTO,
     width: window.innerWidth,  // Set the width to the window's width
     height: window.innerHeight,
+    // width: 800,
+    // height: 600,
     physics: {
         default: 'arcade', // Enable Arcade Physics
         arcade: {
@@ -20,6 +22,8 @@ var config = {
 var game = new Phaser.Game(config);
 var player; 
 var cursors;
+var wallsGroup;
+
 // Load your images
 function preload() {
     this.load.image('path_7_lft', 'img/path_7_lft.png');
@@ -40,7 +44,7 @@ function preload() {
     this.load.image('path_vert', 'img/path_vert.png');
     this.load.image('wall', 'img/wall.png');
     // this.load.spritesheet('girl', '../assets/char free/ari.png', { frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('girl', '../assets/char free/ari.png', { frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('girl', '../assets/characters/girl_main.png', { frameWidth: 16, frameHeight: 24});
 }
     // ... load other images ...
 
@@ -48,7 +52,7 @@ function preload() {
 
 function create() {
     // Set background color
-    this.cameras.main.setBackgroundColor('#000000');
+    // this.cameras.main.setBackgroundColor('#000000');
 
     // Create maze
      const maze = [
@@ -68,15 +72,19 @@ function create() {
     // Calculate the total width and height of the maze in pixels
     const mazeWidth = maze[0].length * tileSize;
     const mazeHeight = maze.length * tileSize;
-
-    // Calculate the center of the game canvas
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
-
-    // Calculate the starting position for the maze to be centered
     const startX = centerX - mazeWidth / 2;
     const startY = centerY - mazeHeight / 2;
 
+    
+
+    // this.physics.world.enable(player);
+    // player.setCollideWorldBounds(true);
+
+    const wallsGroup = this.physics.add.staticGroup();
+
+  
     // Create maze sprites
     for (let row = 0; row < maze.length; row++) {
         for (let col = 0; col < maze[row].length; col++) {
@@ -87,26 +95,63 @@ function create() {
             // Create a sprite for each maze element
             const sprite = this.physics.add.sprite(x, y, tile);
             sprite.setOrigin(0.5); // Set the origin to the center
+            this.physics.world.enable(sprite);
+
+            // if (tile !== "wall") {
+            //     sprite.body.setImmovable(true);
+
+            //     // Add collisions between the player and the wall
+            //     this.physics.add.collider(player, sprite);
+            // }
+            // if (tile === "wall") {
+            //     wallsGroup.add(sprite);
+            // }
+
+            if (tile === "wall") {
+                const wallSprite = wallsGroup.create(x, y, 'wall'); // Replace 'path_hori' with the appropriate key
+                wallSprite.setOrigin(0.5);
+            }
+
+            // // Make the wall sprite immovable (so it doesn't react to collisions)
+            // sprite.body.setImmovable(true);
+
+            // // Add collisions between the player and the wall
+            // this.physics.add.collider(player, sprite);
         }
     }
 
     // Create player
     // player = this.physics.add.sprite(centerX, centerY, 'girl');
-    player = this.physics.add.sprite(centerX, centerY, 'girl');
-    player.setOrigin(0.5);
+    
     // player.setBounce(0.2);
     // player.setCollideWorldBounds(true);
 
+    player = this.physics.add.sprite(centerX, centerY, 'girl');
+    player.setOrigin(0.5);
+    player.setScale(2);
+
+    // player.setBounce(0.2);
+    this.physics.world.enable(player);
+    player.setCollideWorldBounds(true);
+
+    this.physics.add.collider(player, wallsGroup);
+
+    // this.physics.world.enable(player);
+    // player.setCollideWorldBounds(true);
+
+
+
+
     this.anims.create({
         key: 'right',
-        frames: this.anims.generateFrameNumbers('girl', { start: 0, end: 3 }),
+        frames: this.anims.generateFrameNumbers('girl', { frames: [2, 10, 18] }),
         frameRate: 10,
         repeat: -1
     });
 
     this.anims.create({
         key: 'up',
-        frames: this.anims.generateFrameNumbers('girl', { start: 0, end: 3 }),
+        frames: this.anims.generateFrameNumbers('girl', { frames: [0, 8, 16] }),
         frameRate: 10,
         repeat: -1
     });
@@ -116,21 +161,21 @@ function create() {
     // Configure animations
     this.anims.create({
         key: 'left',
-        frames: this.anims.generateFrameNumbers('girl', { start: 5, end: 8}),
+        frames: this.anims.generateFrameNumbers('girl', { frames: [6, 14, 22] }),
         frameRate: 10,
         repeat: -1
     });
 
     this.anims.create({
         key: 'down',
-        frames: this.anims.generateFrameNumbers('girl', { start: 5, end: 8}),
+        frames: this.anims.generateFrameNumbers('girl', { frames: [4, 12, 20] }),
         frameRate: 10,
         repeat: -1
     });
 
     this.anims.create({
         key: 'turn',
-        frames: [ { key: 'girl', frame: 5 } ],
+        frames: [ { key: 'girl', frame: 4 } ],
         frameRate: 20
     });
 
