@@ -3,60 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Load Page Example</title>
+  <title>Melodious Grove Blog</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <label for="title">Melodious Grove - Blog Post</label>
+  <div id="blog-section">
+    <h2>Overview</h2>
 
-  <h1>Melodious Grove</h1>
+    <a href="https://elvinawibisono.github.io/melodious_grove/intro_story/intro.html">Melodious Grove</a>
 
-  <!-- Create a button with an id for JavaScript to reference -->
-  <button id="minigame1">Minigame 1</button>
+    <p>Click the link above to play the game!</p>
 
-  <!-- Create a button with an id for JavaScript to reference -->
-  <button id="minigame2">Minigame 2</button>
+    <p>
+      This game follows a young girl, Ari, as she journeys into the Melodious Grove, a mysterious forest, to complete a series of musical tasks in order to obtain ingredients to make a magic potion to save her grandma.
+      Melodious Grove is developed using WebAudio and the 3 different musical tasks, presented as mini games, are meant to showcase the different concepts and techniques we learned in COMS 3430: Computational Sound class.
+    </p>
 
-  <!-- Create a button with an id for JavaScript to reference -->
-  <button id="minigame3">Minigame 3</button>
+    
+    <h2>Intro</h2>
 
+    <p>
+      The game opens with an introductory story. The user is introduced to Ari and is told of her main goal of the game.
+      We were inspired by old games we grew up to, like Pokemon, and to match that aesthetic, we have a visual of Ari as a pixellated game character
+      and changed the font to match. The story is told with a typewriter effect and the user can press 'ENTER' to get the next line 
+      of texts, just like in Pokemon. On the 
+    </p>
 
+    <h2>Minigame 1 - Echo Direction</h2>
 
-  <script>
-    // Get the button element by its id
-    var gameButton1 = document.getElementById("minigame1");
+    <h2>Minigame 2 - Frequency Matching</h2>
 
-    // Add a click event listener to the button
-    gameButton1.addEventListener("click", function() {
-      // Change the location to the URL of the new page
-      window.location.href = "minigame1.html";
-    });
+    <h2>Minigame 3 - Memory Pattern</h2>
 
+    <h2>Outro</h2>
 
-
-    // Get the button element by its id
-    var gameButton2 = document.getElementById("minigame2");
-
-    // Add a click event listener to the button
-    gameButton2.addEventListener("click", function() {
-      // Change the location to the URL of the new page
-      window.location.href = "minigame2.html";
-    });
-
-
-
-
-
-    // Get the button element by its id
-    var gameButton3 = document.getElementById("minigame3");
-
-    // Add a click event listener to the button
-    gameButton3.addEventListener("click", function() {
-      // Change the location to the URL of the new page
-      window.location.href = "minigame3.html";
-    });
-  </script>
-
+</div>
 </body>
-<script src="main.js"></script>
 
 
 </html>
