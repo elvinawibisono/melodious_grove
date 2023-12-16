@@ -19,11 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    const storyTexts = ["Hi, my name is Ari!", 
-                        "My grandma is dying and I need your help to save her.", 
-                        "I need to find the ingredients to make a magic potion that could heal her.",
-                        "But, the ingredients are hidden in the MELODIOUS GROVE, a mysterious forest that I've only heard of in stories!",
-                        "Please help me find my way around the MELODIOUS GROVE and save my grandma!!!"];
+    const storyTexts = ["We did it! We gathered all the ingredients that we needed to make the magic potion!",
+                        "I have to quickly go back home now and give this to my grandma. Thank you so much for your help and hope we'll meet again in my next adventure!",
+                        "THE END."];
     let currentTextIndex = 0;
     let isTyping = false;
 
@@ -39,9 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.addEventListener('keydown', function (event) {
-        if (currentTextIndex === storyTexts.length) {
-            hiddenButton.classList.remove('hidden'); // show hidden button
-        }
         if (event.key === 'Enter' && !isTyping && currentTextIndex < storyTexts.length) {
             // clear existing text before starting the typing effect
             storyElement.innerHTML = '';

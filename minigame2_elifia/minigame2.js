@@ -1,5 +1,7 @@
+const storyElement = document.getElementById('story');
+    
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-let filter, microphoneStream = null;
+let filter, compressor, microphoneStream = null;
 let analyserNode = audioCtx.createAnalyser();
 let audioData = new Float32Array(analyserNode.fftSize);
 let corrolatedSignal = new Float32Array(analyserNode.fftSize);
@@ -10,29 +12,82 @@ let isMicrophoneEnabled = false;
 var smoothedPitch = 0.0;
 const smoothingFactor = 0.1;
 
-const targetPitchMin = Math.floor(Math.random() * (1000 - 300) + 200);
-const targetPitchMax = targetPitchMin + 300;
+// sets the range that the user needs to sing
+const targetPitchMin = Math.floor(Math.random() * (500 - 250) + 150);
+const targetPitchMax = targetPitchMin + 250;
 
+// checks if the user holds the note for 3 seconds and to stop updating if the user already won
 let greenBarDuration = 0;
-let shouldUpdateBar = true; // Flag to control whether the bar should be updated
+let shouldUpdateBar = true; 
+
+let currentTextIndex = 0;
+let isTyping = false;
+storyTexts = ["Hmm, I think we have reached the famous SINGING TREES of the MELODIOUS GROVE.",
+        "I was told that one of the ingredients for the magic potion is hidden within these trees and you must sing at a certain pitch range to obtain the ingredient!",
+        "Above me is a bar that will show you the pitch when you sing into the microphone. When you find the correct pitch range, the bar will turn green. You'll need to hold that note and sing within that pitch range for 3 seconds until the bar turns blue.",
+        "Good luck! You can do this."]
+
+postGameStory = ["Yay you did it! You helped me obtain the ingredient. Thank you!",
+                "Now, onto the last challenge!"]
 
 console.log(targetPitchMin, ' ', targetPitchMax);
 
-function toggleMicrophone() {
-  if (!isMicrophoneEnabled) {
-    startPitchDetection();
-  } else {
-    stopMicrophone();
-  }
+
+function typeWriterEffect(text, index) {
+    if (index < text.length) {
+        isTyping = true;
+        storyElement.innerHTML += text.charAt(index);
+        index++;
+        setTimeout(() => typeWriterEffect(text, index), 50); // Adjust the typing speed here
+    } else {
+        isTyping = false;  // Reset the flag when typing is done
+    }
 }
+
+document.addEventListener('keydown', function (event) {
+    if (currentTextIndex == storyTexts.length) {
+        if (shouldUpdateBar) {
+            console.log('start')
+            startPitchDetection();
+        }
+        
+    }
+    else if (event.key === 'Enter' && !isTyping && currentTextIndex < storyTexts.length) {
+        // Clear existing text before starting the typing effect
+        storyElement.innerHTML = '';
+        typeWriterEffect(storyTexts[currentTextIndex], 0);
+        currentTextIndex++;
+    }
+    else if (currentTextIndex == storyTexts.length + postGameStory.length) {
+        hiddenButton.classList.remove('hidden');
+    }
+    else if (event.key === 'Enter' && !isTyping && currentTextIndex > storyTexts.length) {
+        storyElement.innerHTML = '';
+        typeWriterEffect(postGameStory[currentTextIndex-storyTexts.length], 0);
+        currentTextIndex++;
+    }
+    
+});
+
+
 
 function goToNextPage() {
   window.location.href = '../minigame3_luci/minigame3.html';
 }
 
+/* https://stackoverflow.com/questions/69237143/how-do-i-get-the-audio-frequency-from-my-mic-using-javascript */
 function startPitchDetection() {
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then((stream) => {
+        /* https://stackoverflow.com/questions/16949768/how-can-i-reduce-the-noise-of-a-microphone-input-with-the-web-audio-api */
+        compressor = audioCtx.createDynamicsCompressor();
+        compressor.threshold.value = -50;
+        compressor.knee.value = 40;
+        compressor.ratio.value = 12;
+        compressor.reduction.value = -20;
+        compressor.attack.value = 0;
+        compressor.release.value = 0.25;
+
       filter = audioCtx.createBiquadFilter();
       filter.Q.value = 8.30;
       filter.frequency.value = 100;
@@ -42,6 +97,9 @@ function startPitchDetection() {
       microphoneStream = audioCtx.createMediaStreamSource(stream);
       microphoneStream.connect(filter);
       filter.connect(analyserNode);
+      filter.connect(compressor);
+
+      compressor.connect(analyserNode)
 
       audioData = new Float32Array(analyserNode.fftSize);
       corrolatedSignal = new Float32Array(analyserNode.fftSize);
@@ -67,7 +125,7 @@ function stopMicrophone() {
     shouldUpdateBar = false; // Disable bar updates
     microphoneStream.disconnect();
     isMicrophoneEnabled = false;
-    document.getElementById('microphoneButton').textContent = 'Toggle Microphone';
+    // document.getElementById('microphoneButton').textContent = 'Toggle Microphone';
   }
 }
 
@@ -109,7 +167,7 @@ function updatePitchBarWidth(pitch) {
   if (shouldUpdateBar && !isNaN(pitch) && !isNaN(smoothedPitch)) {
     smoothedPitch = smoothingFactor * pitch + (1 - smoothingFactor) * smoothedPitch;
   }
-  const normalizedPitch = Math.max(0, Math.min(1200, smoothedPitch));
+  const normalizedPitch = Math.max(0, Math.min(600, smoothedPitch));
 
   console.log('Smoothed Pitch: ', smoothedPitch, 'Pitch: ', pitch);
 
@@ -124,9 +182,20 @@ function updatePitchBarWidth(pitch) {
   if (greenBarDuration >= 3) {
     stopMicrophone();
     pitchIndicator.style.backgroundColor = '#0000ff'; // Blue
+    if (!isTyping && currentTextIndex == storyTexts.length) {
+        storyElement.innerHTML = '';
+        typeWriterEffect(postGameStory[currentTextIndex-storyTexts.length], 0);
+        currentTextIndex++;
+    } 
   } else {
-    pitchIndicator.style.width = `${(normalizedPitch / 1200) * 100}%`;
+    pitchIndicator.style.width = `${(normalizedPitch / 600) * 100}%`;
   }
 }
 
-startPitchDetection();
+function tellStory() {
+    typeWriterEffect(storyTexts[currentTextIndex], 0);
+    currentTextIndex = (currentTextIndex + 1);
+    
+}
+
+tellStory()

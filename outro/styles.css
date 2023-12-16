@@ -50,19 +50,6 @@ body {
     flex-shrink: 0; 
 }
 
-.hidden {
-    display: none;
-}
-
-#hiddenButton {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 150px; 
-    height: 50px; 
-    font-size: 16px; 
-}
-
 #toggleButton {
     cursor: pointer;
     width: 30px; 
