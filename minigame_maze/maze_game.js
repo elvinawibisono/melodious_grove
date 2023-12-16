@@ -1,6 +1,6 @@
 // Create a Phaser.Game instance
 var config = {
-    type: Phaser.AUTO,
+    type: Phaser.CANVAS,
     // width: window.innerWidth,  // Set the width to the window's width
     // height: window.innerHeight,
     width: 1000,
@@ -26,10 +26,19 @@ var wallsGroup;
 var maze;
 var startX;
 var startY;
+var centerX;
+var centerY;
 var tileSize;
 let reachedEnd = false;
 let spotlight; 
 var rays;
+let flashlightGraphics;
+var flashlightCover;
+var flashlightReveal;
+var maskImage;
+var circle;
+var music; 
+var distanceThreshold = 1500;
 
 // Load your images
 function preload() {
@@ -52,6 +61,7 @@ function preload() {
     this.load.image('wall', 'img/wall.png');
     // this.load.spritesheet('girl', '../assets/char free/ari.png', { frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('girl', '../assets/characters/girl_main.png', { frameWidth: 16, frameHeight: 24});
+    this.load.audio('backgroundMusic', '../assets/videogame_music_FINAL.mp3');
 }
     // ... load other images ...
 
@@ -59,24 +69,13 @@ function preload() {
 
 function create() {
     // Set background color
-    this.cameras.main.setBackgroundColor('#000000');
+    // this.cameras.main.setBackgroundColor('#000000');
 
-    // spotlight = this.add.graphics();
-    // spotlight.fillStyle(0x000000, 1); // Set the mask color to black
-    // spotlight.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
+    music = this.sound.add('backgroundMusic', { loop: true });
+    music.play();
 
-    // // Set the blend mode to SOURCE_OUT to make everything transparent except what's drawn on the mask
-    // spotlight.setBlendMode(Phaser.BlendModes.SOURCE_OUT);
-
-    spotlight = this.add.graphics();
-    spotlight.fillStyle(0xffffff, 1); // Set the color to white
-    spotlight.fillCircle(0, 0, 150); // Adjust the circle radius as needed
-
-    // Set the blend mode to SOURCE_OUT to make everything transparent except what's drawn on the mask
-    spotlight.setBlendMode(Phaser.BlendModes.SOURCE_OUT);
-
-
-
+    // const blackScreen = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x000000);
+    // blackScreen.setOrigin(0);
 
     // Create maze
     maze = [
@@ -87,7 +86,7 @@ function create() {
     ["wall", "path_hori_rgt", "path_cross", "path_hori", "path_7_lft"],
     ["path_T_rgt", "path_hori", "path_T_lft", "wall", "path_vert"],
     ["path_L_rgt", "path_hori", "path_cross", "path_hori", "path_T_lft"],
-    ["wall", "wall", "path_vert", "wall", "path_portal_1"],
+    ["wall", "wall", "path_vert", "wall", "path_vert_up"],
     ["path_hori_rgt", "path_hori", "path_T_up", "path_hori_lft", "wall"],
     ];
 
@@ -96,15 +95,19 @@ function create() {
     // Calculate the total width and height of the maze in pixels
     const mazeWidth = maze[0].length * tileSize;
     const mazeHeight = maze.length * tileSize;
-    const centerX = this.cameras.main.width / 2;
-    const centerY = this.cameras.main.height / 2;
+    centerX = this.cameras.main.width / 2;
+    centerY = this.cameras.main.height / 2;
     startX = centerX - mazeWidth / 2;
     startY = centerY - mazeHeight / 2;
 
-    
+    // this.cameras.main.setBounds(0, -mazeHeight / 2, mazeWidth, mazeHeight);
+    // this.physics.world.setBounds(0, -mazeHeight / 2, mazeWidth, mazeHeight);
 
-    // this.physics.world.enable(player);
-    // player.setCollideWorldBounds(true);
+    this.cameras.main.setBounds(500 - mazeWidth / 2, 400 - mazeHeight / 2, mazeWidth, mazeHeight);
+    this.physics.world.setBounds(500 - mazeWidth / 2, 400 - mazeHeight / 2, mazeWidth, mazeHeight);
+
+
+
 
     wallsGroup = this.physics.add.staticGroup();
 
@@ -121,51 +124,69 @@ function create() {
             sprite.setOrigin(0.5); // Set the origin to the center
             this.physics.world.enable(sprite);
 
-            // if (tile !== "wall") {
-            //     sprite.body.setImmovable(true);
-
-            //     // Add collisions between the player and the wall
-            //     this.physics.add.collider(player, sprite);
-            // }
-            // if (tile === "wall") {
-            //     wallsGroup.add(sprite);
-            // }
-
             if (tile === "wall") {
                 const wallSprite = wallsGroup.create(x, y, 'wall'); // Replace 'path_hori' with the appropriate key
                 wallSprite.setOrigin(0.5);
             }
 
-            // // Make the wall sprite immovable (so it doesn't react to collisions)
-            // sprite.body.setImmovable(true);
-
-            // // Add collisions between the player and the wall
-            // this.physics.add.collider(player, sprite);
+         
         }
     }
 
 
-    // Create player
-    // player = this.physics.add.sprite(centerX, centerY, 'girl');
-    
-    // player.setBounce(0.2);
-    // player.setCollideWorldBounds(true);
+   
+
 
     player = this.physics.add.sprite(centerX, centerY, 'girl');
     player.setOrigin(0.5);
     player.setScale(2);
+    // player.setBounce(0.2);
+
+  
+
+    var graphics = this.add.graphics();
+
+    // Draw a filled rectangle as the black background
+    graphics.fillStyle(0x000000, 0.85); // black color, 1 opacity (fully opaque)
+    graphics.fillRect(500 - mazeWidth / 2, 400 - mazeHeight / 2, mazeWidth, mazeHeight);
+    graphics.fillStyle(0xffffff, 0);
+
+    // const maskImage2 = graphics.createGeometryMask();
+    // rect.setMask(maskImage2)
+
+// Draw a filled circle at the player's position
+    graphics.fillCircle(player.x, player.y, 30);
+
+    circle = this.add.graphics();
+   
+    // circle.fillStyle(0xffffff, 0); // 0x000000 is black color, 0 is transparency
+    circle.fillStyle(0xffffff,0);
+    // circle.fillCircle(player.x, player.y, 30);
+    circle.fillCircle(0, 0, 30); 
+    circle.lineStyle(2, 0xffffff, 1); // Set line style (2 is the line width), use lineStyle instead of fillStyle
+    circle.strokeCircle(0, 0, 30);
+
+
+    const maskImage = circle.createGeometryMask();
+    maskImage.invertAlpha = false;
+    graphics.setMask(maskImage);
+
+
+
+    circle.setPosition(player.x, player.y);
+
+    circle.fillStyle(0xffffff,0);
+
 
     // player.setBounce(0.2);
-    this.physics.world.enable(player);
+    this.physics.world.enable(player, true, 0.5, 0.5);
     player.setCollideWorldBounds(true);
 
+    this.cameras.main.startFollow(player);
     this.physics.add.collider(player, wallsGroup);
 
-    // this.physics.world.enable(player);
-    // player.setCollideWorldBounds(true);
-
-
-
+    this.physics.world.debugDrawBody = true;
+    this.physics.world.debugDrawStatic = true;
 
     this.anims.create({
         key: 'right',
@@ -218,6 +239,48 @@ function create() {
         const ray = new Phaser.Geom.Line(player.x, player.y, player.x + Math.cos(radians) * 1000, player.y + Math.sin(radians) * 1000);
         rays.push(ray);
     }
+
+    // // Integrate flashlight from RevealLightScene
+    // const x = 400;
+    // const y = 300;
+
+    // flashlightReveal = this.add.image(x, y, 'path_cross');
+    // flashlightCover = this.add.image(x, y, 'path_cross');
+    // flashlightCover.setTint(0x004c99);
+
+    // const width = flashlightCover.width;
+    // const height = flashlightCover.height;
+
+    // const renderTexture = this.make.renderTexture({
+    //     width,
+    //     height,
+    //     add: false
+    // });
+
+    // maskImage = this.make.image({
+    //     x,
+    //     y,
+    //     key: renderTexture.texture.key,
+    //     add: false
+    // });
+
+    // flashlightCover.mask = new Phaser.Display.Masks.BitmapMask(this, maskImage);
+    // flashlightCover.mask.invertAlpha = true;
+
+    // flashlightReveal.mask = new Phaser.Display.Masks.BitmapMask(this, maskImage);
+
+    // flashlight = this.add.circle(0, 0, 30, 0x000000, 1);
+    // flashlight.visible = false;
+
+    // this.flashlightElements = {
+    //     flashlightReveal,
+    //     flashlightCover,
+    //     renderTexture,
+    //     maskImage
+    // };
+
+
+
 }
 
 function update (){
@@ -226,6 +289,7 @@ function update (){
     //     return;
     // }
 
+   
     if (cursors.left.isDown)
     {
         player.setVelocityX(-160);
@@ -263,100 +327,85 @@ function update (){
         player.anims.play('turn');
     }
 
-    // spotlight.x = player.x;
-    // spotlight.y = player.y;
-    // spotlight.clear(); // Clear the existing mask
-    // spotlight.fillStyle(0x000000, 1); // Set the mask color to black
-    // spotlight.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
+    circle.x = player.x;
+    circle.y = player.y;
 
-    // spotlight.x = player.x;
-    // spotlight.y = player.y;
 
-    // // Draw a circle on the spotlight mask to reveal the area around the player
-    // spotlight.fillStyle(0xffffff, 1); // Set the color to white
-    // spotlight.fillCircle(player.x - startX, player.y - startY, 150);
+    // circle.clear();
+    // circle.fillStyle(0xffffff, 0); // white color, fully opaque
+    // circle.fillCircle(0, 0, 200); // adjust the radius as needed
+    // circle.generateTexture('flashlightMask', 400, 400); // generate a texture for the circle
+    // this.cameras.main.mask = new Phaser.Display.Masks.BitmapMask(this, 'flashlightMask');
 
-    // // Draw a circle on the spotlight mask to reveal the area around the player
-    // spotlight.fillStyle(0xffffff, 1); // Set the color to white
-    // spotlight.fillCircle(player.x - startX, player.y - startY, 150); // Adjust the circle radius as needed
 
+
+    // this.children.removeAll(true);
+
+    
+
+    // Update rays based on the player's position
     // for (let i = 0; i < rays.length; i++) {
     //     const radians = Phaser.Math.DegToRad(i);
     //     rays[i].x1 = player.x;
     //     rays[i].y1 = player.y;
-    //     rays[i].x2 = player.x + Math.cos(radians);
-    //     rays[i].y2 = player.y + Math.sin(radians);
-
-    //     // Check for intersections with walls
-    //     const intersection = getRayIntersection(rays[i]);
-    //     if (intersection) {
-    //         // Draw a line segment from the player to the intersection point
-    //         this.graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xffffff } });
-    //         this.graphics.strokeLineShape(new Phaser.Geom.Line(player.x, player.y, intersection.x, intersection.y));
-    //     }
+    //     rays[i].x2 = player.x + Math.cos(radians) * 1000;
+    //     rays[i].y2 = player.y + Math.sin(radians) * 1000;
     // }
 
-    spotlight.clear();
+    // Draw the flashlight
+    // const { flashlightReveal, flashlightCover, renderTexture, maskImage } = this.flashlightElements;
 
-    // Draw a filled circle on the spotlight mask to reveal the area around the player
-    spotlight.fillStyle(0xffffff, 1); // Set the color to white
-    spotlight.fillCircle(player.x - startX, player.y - startY, 150); // Adjust the circle radius as needed
+    // const x = player.x - flashlightCover.x + flashlightCover.width * 0.5;
+    // const y = player.y - flashlightCover.y + flashlightCover.height * 0.5;
 
-    for (let i = 0; i < rays.length; i++) {
-        const intersection = getRayIntersection(rays[i]);
-        if (intersection) {
-            // Draw a filled circle at the intersection point to darken the surrounding area
-            spotlight.fillStyle(0x000000, 1); // Set the color to black
-            spotlight.fillCircle(intersection.x - startX, intersection.y - startY, 10); // Adjust the circle radius as needed
-        }
-    }
+    // renderTexture.clear();
+    // renderTexture.draw(flashlight, x, y);
 
+    console.log(maze[3][0])
 
-    // spotlight.x = player.x;
-    // spotlight.y = player.y;
+    destination = maze[3][0]
 
-    // // Clear the existing mask
-    // spotlight.clear();
-    // spotlight.fillStyle(0xffffff, 1); // Set the color to white
-    // spotlight.fillCircle(0, 0, 150); // Adjust the circle radius as needed
+    const endTileRow = 1;
+    const endTileCol = 4;
+    const endTileX = startX + endTileCol * tileSize + tileSize / 2;
+    const endTileY = startY + endTileRow * tileSize + tileSize / 2;
+    
 
+    var distance = Phaser.Math.Distance.Between(player.x, player.y, endTileX, endTileY);
+    var volume = Phaser.Math.Clamp(1 - distance / distanceThreshold, 0, 1);
 
+    // music.context.volume.setValueAtTime(volume, this.sound.game.audioContext.currentTime);
 
-    // for (let i = 0; i < rays.length; i++) {
-    //     const intersection = getRayIntersection(rays[i]);
-    //     if (intersection) {
-    //         this.graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xffffff } });
-    //         this.graphics.strokeLineShape(new Phaser.Geom.Line(player.x, player.y, intersection.x, intersection.y));
-    //     }
-    // }
+    music.setVolume(volume);
+
+    console.log("Player Coordinates:", player.x, player.y);
+    console.log("Destination Coordinates:", endTileX, endTileY);
+    console.log("Distance:", distance);
+    console.log("Calculated Volume:", volume);
+
+    
+    console.log("Camera Bounds:", this.cameras.main.worldView);
 
 
    
+
+
     const playerRow = Math.floor((player.y - startY) / tileSize);
     const playerCol = Math.floor((player.x - startX) / tileSize);
 
-    console.log(maze[playerRow][playerCol])
-
-
-
-    if (maze[playerRow][playerCol] === "path_vert_up" && !reachedEnd) {
+    if (maze[playerRow][playerCol] === "end" && !reachedEnd) {
         reachedEnd = true;
         window.alert('Congratulations! You reached the end of the maze!');
- 
         player.setPosition(startX + playerCol * tileSize + tileSize / 2, startY + playerRow * tileSize + tileSize / 2);
     }
-
-    // if (maze[playerRow][playerCol] === "end"){
-    //     window.alert('Congratulations! You reached the end of the maze!');
-    // }
-
-    
-    // console.log('Player coordinates:', player.x, player.y);
 }
+
+
+
+
 
 function getRayIntersection(ray) {
     const hitWalls = wallsGroup.getChildren().filter(wall => Phaser.Geom.Intersects.LineToRectangle(ray, wall.getBounds()));
-
     if (hitWalls.length > 0) {
         const bounds = hitWalls[0].getBounds();
         const center = { x: bounds.centerX, y: bounds.centerY };
@@ -364,230 +413,5 @@ function getRayIntersection(ray) {
     } else {
         return null;
     }
+
 }
-
-function getTileAt(x, y) {
-    // Placeholder function to get the tile type at a specific position
-    // Implement this based on your actual maze logic
-    return "unknown";
-}
-
-
-
-
-// // Create the maze using Phaser.GameObjects.Sprite
-// const maze = [
-//    ["path_7_rgt", "path_hori", "path_hori", "path_hori", "path_7_lft"],
-//    ["path_vert", "wall", "wall", "wall", "end"],
-//    ["path_T_rgt", "path_hori", "path_T_down", "path_hori_lft", "wall"],
-//    ["path_vert_up", "wall", "path_vert", "wall", "wall"],
-//    ["wall", "path_hori_rgt", "path_cross", "path_hori", "path_7_lft"],
-//    ["path_portal_2", "wall", "path_vert", "wall", "path_vert"],
-//    ["path_L_rgt", "path_hori", "path_cross", "path_hori", "path_T_lft"],
-//    ["wall", "wall", "path_vert", "wall", "path_portal_1"],
-//    ["path_hori_rgt", "path_hori", "path_T_up", "path_hori_lft", "wall"],
-// ];
-
-// const tileSize = 32; // Adjust the tile size as needed
-
-// // Function to convert maze positions to pixels
-// function positionToPixels(row, col) {
-//     return {
-//         x: col * tileSize + tileSize / 2,
-//         y: row * tileSize + tileSize / 2
-//     };
-// }
-
-// // Function to create maze sprites
-// function createMaze() {
-//     for (let row = 0; row < maze.length; row++) {
-//         for (let col = 0; col < maze[row].length; col++) {
-//             const tile = maze[row][col];
-//             const position = positionToPixels(row, col);
-
-//             // Create a sprite for each maze element
-//             const sprite = this.add.sprite(position.x, position.y, tile);
-            
-//             // Set the origin to the center
-//             sprite.setOrigin(0.5);
-
-//             // Optionally, add more customization for specific elements
-//             // For example, you can add animations, physics, etc.
-//         }
-//     }
-// }
-
-// // Function to create the game
-// function create() {
-//     // Set background color
-//     this.cameras.main.setBackgroundColor('#000000');
-
-//     // Create the maze
-//     createMaze.call(this);
-
-//     // Add keyboard input for testing (replace with your game logic)
-//     this.input.keyboard.on('keydown_SPACE', function (event) {
-//         // Handle space key press
-//         console.log('Space key pressed!');
-//     });
-// }
-
-
-
-
-
-
-
-
-
-// const button = document.querySelector('.btn_start');
-// const intro_msg = document.querySelector('.intro');
-// const container = document.querySelector(".container");
-// const main = document.querySelector(".main");
-// const gridSize = 200;
-// const startpoint = { x: 2, y: 4 };
-// const endpoint = { x: 4, y: 0 };
-
-
-
-// const maze = [
-//    ["path_7_rgt", "path_hori", "path_hori", "path_hori", "path_7_lft"],
-//    ["path_vert", "wall", "wall", "wall", "end"],
-//    ["path_T_rgt", "path_hori", "path_T_down", "path_hori_lft", "wall"],
-//    ["path_vert_up", "wall", "path_vert", "wall", "wall"],
-//    ["wall", "path_hori_rgt", "path_cross", "path_hori", "path_7_lft"],
-//    ["path_portal_2", "wall", "path_vert", "wall", "path_vert"],
-//    ["path_L_rgt", "path_hori", "path_cross", "path_hori", "path_T_lft"],
-//    ["wall", "wall", "path_vert", "wall", "path_portal_1"],
-//    ["path_hori_rgt", "path_hori", "path_T_up", "path_hori_lft", "wall"],
-// ];
-
-
-
-// let maze_l2_length =  0;
-// for (let i = 0; i < maze.length; i++) {
-   
-//    for (let j = 0; j < maze[i].length; j++) {
-//       const cell = document.createElement("div");
-//       cell.classList.add(maze[i][j]);
-//       container.appendChild(cell);
-//    }
-// }
-
-// //Generate CSS dynamically
-// container.style.gridTemplateColumns = 'repeat('+ maze[0].length +', '+gridSize+'px)';
-// container.style.gridTemplateRows = 'repeat('+maze.length+', '+gridSize+'px)';
-// main.style.width = gridSize + "px";
-// main.style.height = gridSize + "px";
-// intro_msg.style.width = gridSize + "px";
-// intro_msg.style.height = gridSize + "px";
-// container.style.left = - (startpoint.x * gridSize) + "px";
-// container.style.top = - (startpoint.y * gridSize) + "px";
-
-
-// button.addEventListener('click', () => {
-//    intro_msg.style.display = "none";
-//    startGame();
-// })
-
-// function startGame() {
-//    let playerRow = startpoint.y;
-//    let playerCol = startpoint.x;
-//    let topPosition = container.offsetTop;
-//    let leftPosition = container.offsetLeft;
-//    document.addEventListener("keydown", (event) => {
-
-//       if (!main.classList.contains("success")) {
-//          const key = event.key;
-//          if (key === "ArrowUp") {
-//             if (playerRow > 0 && maze[playerRow - 1][playerCol] !== "wall") {
-//                playerRow--;
-//                topPosition += gridSize;
-//                container.style.top = topPosition + "px";
-//             }
-//          } else if (key === "ArrowDown") {
-//             if (playerRow < maze.length - 1 && maze[playerRow + 1][playerCol] !== "wall") {
-//                playerRow++;
-//                topPosition -= gridSize;
-//                container.style.top = topPosition + "px";
-//             }
-//          } else if (key === "ArrowLeft") {
-//             if (playerCol > 0 && maze[playerRow][playerCol - 1] !== "wall") {
-//                playerCol--;
-//                leftPosition += gridSize;
-//                container.style.left = leftPosition + "px";
-
-//                main.classList.add("flip");
-
-//             }
-//          } else if (key === "ArrowRight") {
-//             if (playerCol < maze[0].length - 1 && maze[playerRow][playerCol + 1] !== "wall") {
-//                playerCol++;
-
-//                if (leftPosition >= -(gridSize * endpoint.x)) {
-//                   leftPosition -= gridSize;
-//                   leftPosition == -(gridSize * endpoint.x);
-//                   container.style.left = leftPosition + "px";
-//                }
-
-//                main.classList.remove("flip");
-//             }
-//          }
-
-        
-
-//          const portal_1 = { x: 4, y: (7-1) };
-//          const portal_2 = { x: 0, y: (5+1) };
-//          if(maze[playerRow][playerCol] === "path_portal_1"){
-//             playerCol = portal_2.x;
-//             playerRow = portal_2.y;
-//             leftPosition = - (portal_2.x) * gridSize;
-//             topPosition = - (portal_2.y)  * gridSize;
-           
-//             setTimeout(() => {
-//                main.classList.add("portal");
-//                container.classList.add("no_animation");
-//                container.style.top = topPosition + "px";
-//                container.style.left = leftPosition + "px";
-//                return false;
-//             }, 1000);
-//             setTimeout(() => {
-//                main.classList.remove("portal");
-//                container.classList.remove("no_animation");
-//                return false;
-//             }, 2500);
-//          }
-//          else if(maze[playerRow][playerCol] === "path_portal_2"){
-//             playerCol = portal_1.x;
-//             playerRow = portal_1.y;
-//             leftPosition = - (portal_1.x) * gridSize;
-//             topPosition = - (portal_1.y)  * gridSize;
-           
-//             setTimeout(() => {
-//                main.classList.add("portal");
-//                container.classList.add("no_animation");
-//                container.style.top = topPosition + "px";
-//                container.style.left = leftPosition + "px";
-              
-//                return false;
-//             }, 1000);
-//             setTimeout(() => {
-//                main.classList.remove("portal");
-//                container.classList.remove("no_animation");
-//                return false;
-//             }, 2500);
-//          }
-//          else if (maze[playerRow][playerCol] === "end") {
-//             setTimeout(() => {
-//                main.classList.add("success");
-//                container.style.left = -(gridSize * endpoint.x) + "px";
-//                return false;
-//             }, 1000);
-//          } 
-
-//       }
-//    });
-
-
-
-// }
