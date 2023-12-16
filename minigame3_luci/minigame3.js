@@ -206,6 +206,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
         genAudio(data);
     }
 
+    var endButton = document.getElementById("end-game-button");
+
+    endButton.addEventListener('click', function () {
+        goToNextPage();
+    });
+
+
+    function goToNextPage() {
+        window.location.href = '../outro/outro.html';
+    }
+
     playButton.addEventListener('click', function () {
         if (!audioCtx) {
             initAudio();
