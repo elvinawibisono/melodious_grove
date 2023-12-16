@@ -41,7 +41,7 @@
                 left: 50%;
                 transform: translate(-50%, -50%);
                 padding: 20px;
-                background-color: #fff;
+                background-color:burlywood;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
                 z-index: 2;
             }
@@ -53,7 +53,7 @@
                 left: 50%;
                 transform: translate(-50%, -50%);
                 padding: 20px;
-                background-color: #fff;
+                background-color:khaki;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
                 z-index: 2;
             }
@@ -92,16 +92,24 @@
             .button-right{
                 text-align: right;
             }
+            .center-container{
+                text-align: center;
+            }
+
+            body {
+                margin: 0;
+                font-family: 'Press Start 2P', sans-serif; 
+                background: url('../assets/wood.png') no-repeat center center fixed;
+                background-size: cover;
+            }
+            .level-header{
+                background-color:cornsilk;
+                text-align:center;
+            }
         </style>
     </head>
 
     <body>
-
-        <div class="button-container">
-            <button onclick="openInstructionModal()">Instructions</button>
-        </div>
-
-    
 
         <!-- Overlay background -->
         <div id="welcomeOverlay" class="welcome-overlay"></div>
@@ -109,8 +117,13 @@
         <!-- Modal content -->
         <div id="welcomeModal" class="welcome-modal">
             <span class="welcome-close-btn" onclick="closeWelcomeModal()">&times;</span> <!-- &times; is an "x" character for close button -->
-            <h1>Welcome</h1>
-            <p>Welcome, young one. It seems you have made it to the third minigame; however, you must open these three boxes. Each box opens up when you play a tune. Using your keyboard, you must play the tunes to open each box. I will play you a sequence of notes, and you must play it back in the exact order. Play all 3 sucessfully, and I can give you the last three ingredients you need! </p>
+            <div class="center-container">
+                <h1>Welcome</h1>
+                <p>Welcome, young one. It seems you have made it to the third minigame; however, you must open these three boxes. Each box opens up when you play a tune. Using your keyboard, you must play the tunes to open each box. I will play you a sequence of notes, and you must play it back in the exact order. Play all 3 sucessfully, and I can give you the last three ingredients you need! </p>
+                <p></p>
+                <p>Do not play the keyboard when the sound is playing, and if you need a reference image to map the piano keys to your keyboard, please refer to the reference (button on the side).</p>
+                <img src="../assets/chest.png" alt="TreasureChest" height="50%" width="40%">
+            </div>
         </div>
 
         <!-- Overlay background -->
@@ -140,21 +153,30 @@
         <!-- Win, next level -->
         <div id="win_level1" class="modal">
             <button id="nextlevel" onclick="nextLevelButton1()"> Next level</button> <!-- &times; is an "x" character for close button -->
-            <h1>Congratulations! Round 1 COMPLETE.</h1>
-            <p>Wow, that one was tricky! You have opened the first box and have accessed the seeds. But the journey isn't over yet! You still have two boxes. The next box will be a bit more tricky, with more notes included (C, D, E, F, G, A, B). This gives you a variation of 12 notes instead of 5. There will still be 7 different notes played. Are you ready? </p>
+            <div class="center-container">
+                <h1>Congratulations! Round 1 COMPLETE.</h1>
+                <p>Wow, that one was tricky! You have opened the first box and have accessed the seeds. But the journey isn't over yet! You still have two boxes. The next box will be a bit more tricky, with more notes included (C, D, E, F, G, A, B). This gives you a variation of 12 notes instead of 5. There will still be 7 different notes played. Are you ready? </p>
+                <img src="../assets/locked_chest.png" alt="TreasureChest" height="50%" width="50%">
+            </div>
         </div>
 
 
         <div id="win_level2" class="modal">
             <button id="nextlevel" onclick="nextLevelButton2()"> Next level</button> <!-- &times; is an "x" character for close button -->
-            <h1>Whoa! Round 2 COMPLETE.</h1>
-            <p>You sure have a knack for opening boxes! Here are the sprouts you were looking for. That one was close! Good thing you only have one more box left! The last box will contain all of the notes, totaling 24 variations. There will still be 7 different notes played. Click "Next level" when ready. </p>
+            <div class="center-container">
+                <h1>Whoa! Round 2 COMPLETE.</h1>
+                <p>You sure have a knack for opening boxes! Here are the sprouts you were looking for. That one was close! Good thing you only have one more box left! The last box will contain all of the notes, totaling 24 variations. There will still be 7 different notes played. Click "Next level" when ready. </p>
+            </div>
         </div>
         
 
         <div id="win" class="modal">
-            <h1>YOU WIN</h1>
-            <p>That was hard, but you cracked all 3 boxes. Now, quick! Hurry! Bring the ingredients to your dying grandma! </p>
+            <button id="end-game-button">Next</button>
+            <div class="center-container">
+                <h1>YOU WIN</h1>
+                <p>That was hard, but you cracked all 3 boxes. Now, quick! Hurry! Bring the ingredients to your dying grandma! </p>
+                <img src="../assets/chest.png" alt="TreasureChest" height="50%" width="50%">
+            </div>
         </div>
         
         
@@ -163,10 +185,10 @@
 
         
 
-        <h1 id="level_text"> Level 1 </h1>
+        <h1 id="level_text" class="level-header"> Level 1 </h1>
 
         <div>
-        <button id="playButton">play</button>
+        <button id="playButton">PLAY</button>
         <div class="button-right"><button onclick="openRef()">Reference keys</button></div>
         </div>
 
