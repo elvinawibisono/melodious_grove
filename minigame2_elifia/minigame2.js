@@ -72,7 +72,7 @@ document.addEventListener('keydown', function (event) {
 
 
 function goToNextPage() {
-  window.location.href = '../minigame3_luci/minigame3.html';
+  window.location.href = '../minigame3_luci/transition.html';
 }
 
 /* https://stackoverflow.com/questions/69237143/how-do-i-get-the-audio-frequency-from-my-mic-using-javascript */
