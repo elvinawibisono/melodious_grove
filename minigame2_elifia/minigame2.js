@@ -13,8 +13,8 @@ var smoothedPitch = 0.0;
 const smoothingFactor = 0.1;
 
 // sets the range that the user needs to sing
-const targetPitchMin = Math.floor(Math.random() * (500 - 250) + 150);
-const targetPitchMax = targetPitchMin + 250;
+let targetPitchMin = Math.floor(Math.random() * (500 - 250) + 150);
+let targetPitchMax = targetPitchMin + 250;
 
 // checks if the user holds the note for 3 seconds and to stop updating if the user already won
 let greenBarDuration = 0;
@@ -24,13 +24,15 @@ let currentTextIndex = 0;
 let isTyping = false;
 storyTexts = ["Hmm, I think we have reached the famous SINGING TREES of the MELODIOUS GROVE.",
         "I was told that one of the ingredients for the magic potion is hidden within these trees and you must sing at a certain pitch range to obtain the ingredient!",
-        "Above me is a bar that will show you the pitch when you sing into the microphone. When you find the correct pitch range, the bar will turn green. You'll need to hold that note and sing within that pitch range for 3 seconds until the bar turns blue.",
+        "Above me is a bar that will show you the pitch when you sing into the microphone. When you find the correct pitch range, the bar will turn green. You'll need to hold that note and sing within that pitch range for a few seconds before we get any response from the trees.",
         "Good luck! You can do this."]
 
 postGameStory = ["Yay you did it! You helped me obtain the ingredient. Thank you!",
-                "Now, onto the last challenge!"]
+                "Now, let's find the other ingredients!"]
 
 console.log(targetPitchMin, ' ', targetPitchMax);
+
+let level = 1
 
 
 function typeWriterEffect(text, index) {
@@ -113,7 +115,6 @@ function startPitchDetection() {
       }, 100);
 
       isMicrophoneEnabled = true;
-      document.getElementById('microphoneButton').textContent = 'Disable Microphone';
     })
     .catch((err) => {
       console.log(err);
@@ -125,10 +126,10 @@ function stopMicrophone() {
     shouldUpdateBar = false; // Disable bar updates
     microphoneStream.disconnect();
     isMicrophoneEnabled = false;
-    // document.getElementById('microphoneButton').textContent = 'Toggle Microphone';
   }
 }
 
+/* https://stackoverflow.com/questions/69237143/how-do-i-get-the-audio-frequency-from-my-mic-using-javascript */
 function getAutocorrolatedPitch() {
   let maximaCount = 0;
 
@@ -180,17 +181,55 @@ function updatePitchBarWidth(pitch) {
   }
 
   if (greenBarDuration >= 3) {
+    // greenBarDuration = 0;
+    // shouldUpdateBar = false;
+    
     stopMicrophone();
-    pitchIndicator.style.backgroundColor = '#0000ff'; // Blue
-    if (!isTyping && currentTextIndex == storyTexts.length) {
+    if (level < 3) {
+      startNextLevel()
+    }
+
+    if (level == 3 && !isTyping && currentTextIndex == storyTexts.length) {
         storyElement.innerHTML = '';
         typeWriterEffect(postGameStory[currentTextIndex-storyTexts.length], 0);
         currentTextIndex++;
     } 
+    
   } else {
     pitchIndicator.style.width = `${(normalizedPitch / 600) * 100}%`;
   }
 }
+
+function startNextLevel() {
+  level++;
+  greenBarDuration = 0;
+  shouldUpdateBar = true;
+  targetPitchMin = Math.floor(Math.random() * (500 - 250) + 150);
+  targetPitchMax = targetPitchMin + 250;
+
+  if (level == 2) {
+    if (!isTyping) {
+      storyElement.innerHTML = '';
+      typeWriterEffect('Huh, that\'s weird... Nothing Happened! Shall we try again?',0);
+    }
+    setTimeout(() => {
+      startPitchDetection();
+    }, 6000);
+  } 
+  else if (level == 3) {
+    if (!isTyping) {
+      storyElement.innerHTML = '';
+      typeWriterEffect('Oh wait, I can hear the leaves rustling! We should do it one more time and I think that\'ll do it.',0);
+    }
+    setTimeout(() => {
+      startPitchDetection();
+    }, 6000);
+  }
+  else {
+    // All levels completed, show the final message
+  }
+}
+
 
 function tellStory() {
     typeWriterEffect(storyTexts[currentTextIndex], 0);
