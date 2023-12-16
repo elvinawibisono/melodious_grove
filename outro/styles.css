@@ -1,0 +1,60 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Press Start 2P', sans-serif; 
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.game-container {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+}
+
+.character-image {
+    width: 500px;
+    margin-right: 20px; 
+}
+
+.character-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.story-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto; 
+    width: 600px; 
+}
+
+.story {
+    font-size: 18px;
+    white-space: pre-wrap; 
+    border-right: 2px solid #000;
+    overflow: hidden;
+    line-height: 1.5;
+    flex-shrink: 0; 
+}
+
+#toggleButton {
+    cursor: pointer;
+    width: 30px; 
+    height: 30px;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
