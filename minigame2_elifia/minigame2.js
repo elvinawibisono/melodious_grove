@@ -13,8 +13,8 @@ var smoothedPitch = 0.0;
 const smoothingFactor = 0.1;
 
 // sets the range that the user needs to sing
-let targetPitchMin = Math.floor(Math.random() * (500 - 250) + 150);
-let targetPitchMax = targetPitchMin + 250;
+let targetPitchMin = Math.floor(Math.random() * (500 - 100) + 150);
+let targetPitchMax = targetPitchMin + 100;
 
 // checks if the user holds the note for 3 seconds and to stop updating if the user already won
 let greenBarDuration = 0;
@@ -204,8 +204,8 @@ function startNextLevel() {
   level++;
   greenBarDuration = 0;
   shouldUpdateBar = true;
-  targetPitchMin = Math.floor(Math.random() * (500 - 250) + 150);
-  targetPitchMax = targetPitchMin + 250;
+  targetPitchMin = Math.floor(Math.random() * (500 - 100) + 150);
+  targetPitchMax = targetPitchMin + 100;
 
   if (level == 2) {
     if (!isTyping) {
