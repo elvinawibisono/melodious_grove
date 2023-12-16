@@ -31,46 +31,64 @@
     </p>
 
     <h2>Minigame 1 - Echo Direction</h2>
+    <button onclick="goToMiniGame1()">Minigame 1</button>
 
     <h2>Minigame 2 - Frequency Matching</h2>
+    <button onclick="goToMiniGame2()">Minigame 2</button>
+    
+    <div>
+      <h2>Minigame 3 - Memory Pattern</h2>
+      <button onclick="goToMiniGame3()">Minigame 3</button>
+      <h3>Goal</h3>
+      <p>For this game, we wanted to use the ASMR enveloping feature, which is something we wanted to improve from our past homeworks that had clicking. 
+        Intiially, we were ambitious as we wanted to change the oscillators and the waveform, and have other instruments other than a piano. This would have
+        been similar implementation as the benchmark we already have for the piano sequence; however, it would have been significantly more front-end, which 
+        seemed out of the scope of this particular assignment. </p>
+        <p>Since we ultimately wanted to bridge the knowledge we learned in computational sound with human-computer interaction knowledge, we decided to make a game
+          where the user must perform a memorization task. This bridges what we learned about generating smooth sounds with WebAudio, as well as controlling gain values,
+          oscillartors, and managing multiple notes at once. There was also a generative aspect of this assignment, which took inspiration from live coding.
+          This was that the pattern that is generated from the computer is random. Given that the user generated notes and the computer generated notes are happening
+          simultaneously, we not only have to manage multiple oscillators and gain nodes, but also two completely different audio contexts. This showed challenging at times. </p>
+        
+      <h3>Challenges</h3>
+      <p>Challenges we faced on minigame had a lot to do with timing. Since we are generaring a sequence of notes, we had to figure out how to time the visuals with the sound correctly,
+        and then since there were a total of 24 different notes, we needed to keep track of all of them simultaneously. We had to debug to make sure every node was connected
+        correctly. Another challenge we had for this game was the front-end. A note on hard-coding: the position of each of the dots are computed, not hard coded; however,
+        in the html file, we needed to create distinct dots for every single note. This is because we initally planned for the user to be able to play multiple notes at one time.
+        This did not get added to our final game, as we decided that our game exhibits computational sound concepts enough, and we did not need to add extraneous levels. 
+      </p>
 
-    <h2>Minigame 3 - Memory Pattern</h2>
-    <h3>Goal</h3>
-    <p>For this game, we wanted to use the ASMR enveloping feature, which is something we wanted to improve from our past homeworks that had clicking. 
-      Intiially, we were ambitious as we wanted to change the oscillators and the waveform, and have other instruments other than a piano. This would have
-      been similar implementation as the benchmark we already have for the piano sequence; however, it would have been significantly more front-end, which 
-      seemed out of the scope of this particular assignment. </p>
-      <p>Since we ultimately wanted to bridge the knowledge we learned in computational sound with human-computer interaction knowledge, we decided to make a game
-        where the user must perform a memorization task. This bridges what we learned about generating smooth sounds with WebAudio, as well as controlling gain values,
-        oscillartors, and managing multiple notes at once. There was also a generative aspect of this assignment, which took inspiration from live coding.
-        This was that the pattern that is generated from the computer is random. Given that the user generated notes and the computer generated notes are happening
-        simultaneously, we not only have to manage multiple oscillators and gain nodes, but also two completely different audio contexts. This showed challenging at times. </p>
-      
-    <h3>Challenges</h3>
-    <p>Challenges we faced on minigame had a lot to do with timing. Since we are generaring a sequence of notes, we had to figure out how to time the visuals with the sound correctly,
-      and then since there were a total of 24 different notes, we needed to keep track of all of them simultaneously. We had to debug to make sure every node was connected
-      correctly. Another challenge we had for this game was the front-end. A note on hard-coding: the position of each of the dots are computed, not hard coded; however,
-      in the html file, we needed to create distinct dots for every single note. This is because we initally planned for the user to be able to play multiple notes at one time.
-      This did not get added to our final game, as we decided that our game exhibits computational sound concepts enough, and we did not need to add extraneous levels. 
-    </p>
-
-    <h3>Choices</h3>
-    <ul>
-      <li>Pattern matching: We decided to do pattern matching and not pitch recognition, because it would be easier for the general audience. Without training
-        in knowing pitches, there is no other way to have predicted.</li>
-      <li>Sine wave: This sounded most like a common grand piano.</li>
-      <li>7 notes: 7 is a good number for notes to be generated. </li>
-      <li>Increments of 5, 12, 24. 5 is a good start, as 5 different notes will account for around half of the "bottom" level. 12, will account for all of the 
-        "bottom" keys, and then 24 will range the entire keyboard. </li>
-      <li>Instrument: Piano is the easiest to visualize, as the piano keyboard has direct correlation with the computer keyboard. Since this is the most intutive, it was best fit for a game  
-        targeted to the general public.</li>
-    </ul>
-
+      <h3>Choices</h3>
+      <ul>
+        <li>Pattern matching: We decided to do pattern matching and not pitch recognition, because it would be easier for the general audience. Without training
+          in knowing pitches, there is no other way to have predicted.</li>
+        <li>Sine wave: This sounded most like a common grand piano.</li>
+        <li>7 notes: 7 is a good number for notes to be generated. </li>
+        <li>Increments of 5, 12, 24. 5 is a good start, as 5 different notes will account for around half of the "bottom" level. 12, will account for all of the 
+          "bottom" keys, and then 24 will range the entire keyboard. </li>
+        <li>Instrument: Piano is the easiest to visualize, as the piano keyboard has direct correlation with the computer keyboard. Since this is the most intutive, it was best fit for a game  
+          targeted to the general public.</li>
+      </ul>
+    </div>
 
     <h2>Outro</h2>
 
 </div>
 </body>
+
+<script>
+  function goToMiniGame1(){
+    window.location.href = 'minigame_maze/maze.html';
+  }
+
+  function goToMiniGame2(){
+    window.location.href = 'minigame2_elifia/minigame2.html';
+  }
+
+  function goToMiniGame3(){
+    window.location.href = 'minigame3_luci/transition.html';
+  }
+</script>
 
 
 </html>
