@@ -19,6 +19,12 @@
     height: 100vh;
 }
 
+body {
+    margin: 0;
+    font-family: 'Press Start 2P', sans-serif; 
+}
+
+
 .character-image {
     width: 500px;
     margin-right: 20px; 
@@ -42,8 +48,12 @@
 .story {
     font-size: 18px;
     white-space: pre-wrap; 
-    border-right: 2px solid #000;
+    border-right: 2px solid #fff;
     overflow: hidden;
     line-height: 1.5;
     flex-shrink: 0; 
+}
+
+.hidden {
+  display: none;
 }

@@ -1,3 +1,5 @@
+const storyElement = document.getElementById('story');
+    
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let filter, compressor, microphoneStream = null;
 let analyserNode = audioCtx.createAnalyser();
@@ -18,11 +20,56 @@ const targetPitchMax = targetPitchMin + 250;
 let greenBarDuration = 0;
 let shouldUpdateBar = true; 
 
-story = ["Hmm, I think we have reached the famous SINGING TREES of the MELODIOUS GROVE.",
+let currentTextIndex = 0;
+let isTyping = false;
+storyTexts = ["Hmm, I think we have reached the famous SINGING TREES of the MELODIOUS GROVE.",
         "I was told that one of the ingredients for the magic potion is hidden within these trees and you must sing at a certain pitch range to obtain the ingredient!",
-        "Above me is a bar that will show you the pitch of your voice"]
+        "Above me is a bar that will show you the pitch when you sing into the microphone. When you find the correct pitch range, the bar will turn green. You'll need to hold that note and sing within that pitch range for 3 seconds until the bar turns blue.",
+        "Good luck! You can do this."]
+
+postGameStory = ["Yay you did it! You helped me obtain the ingredient. Thank you!",
+                "Now, onto the last challenge!"]
 
 console.log(targetPitchMin, ' ', targetPitchMax);
+
+
+function typeWriterEffect(text, index) {
+    if (index < text.length) {
+        isTyping = true;
+        storyElement.innerHTML += text.charAt(index);
+        index++;
+        setTimeout(() => typeWriterEffect(text, index), 50); // Adjust the typing speed here
+    } else {
+        isTyping = false;  // Reset the flag when typing is done
+    }
+}
+
+document.addEventListener('keydown', function (event) {
+    if (currentTextIndex == storyTexts.length) {
+        if (shouldUpdateBar) {
+            console.log('start')
+            startPitchDetection();
+        }
+        
+    }
+    else if (event.key === 'Enter' && !isTyping && currentTextIndex < storyTexts.length) {
+        // Clear existing text before starting the typing effect
+        storyElement.innerHTML = '';
+        typeWriterEffect(storyTexts[currentTextIndex], 0);
+        currentTextIndex++;
+    }
+    else if (currentTextIndex == storyTexts.length + postGameStory.length) {
+        hiddenButton.classList.remove('hidden');
+    }
+    else if (event.key === 'Enter' && !isTyping && currentTextIndex > storyTexts.length) {
+        storyElement.innerHTML = '';
+        typeWriterEffect(postGameStory[currentTextIndex-storyTexts.length], 0);
+        currentTextIndex++;
+    }
+    
+});
+
+
 
 function goToNextPage() {
   window.location.href = '../minigame3_luci/minigame3.html';
@@ -135,15 +182,20 @@ function updatePitchBarWidth(pitch) {
   if (greenBarDuration >= 3) {
     stopMicrophone();
     pitchIndicator.style.backgroundColor = '#0000ff'; // Blue
+    if (!isTyping && currentTextIndex == storyTexts.length) {
+        storyElement.innerHTML = '';
+        typeWriterEffect(postGameStory[currentTextIndex-storyTexts.length], 0);
+        currentTextIndex++;
+    } 
   } else {
     pitchIndicator.style.width = `${(normalizedPitch / 600) * 100}%`;
   }
 }
 
 function tellStory() {
-
-
-    startPitchDetection();
+    typeWriterEffect(storyTexts[currentTextIndex], 0);
+    currentTextIndex = (currentTextIndex + 1);
+    
 }
 
-startPitchDetection();
+tellStory()
