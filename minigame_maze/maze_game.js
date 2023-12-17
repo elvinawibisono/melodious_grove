@@ -61,7 +61,7 @@ function preload() {
     this.load.image('wall', 'img/wall.png');
     // this.load.spritesheet('girl', '../assets/char free/ari.png', { frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('girl', '../assets/characters/girl_main.png', { frameWidth: 16, frameHeight: 24});
-    this.load.audio('backgroundMusic', '../assets/videogame_music_FINAL.mp3');
+    this.load.audio('backgroundMusic', '../assets/mazegame_music.mp3');
 }
     // ... load other images ...
 
@@ -142,8 +142,6 @@ function create() {
     player.setScale(2);
     // player.setBounce(0.2);
 
-  
-
     var graphics = this.add.graphics();
 
     // Draw a filled rectangle as the black background
@@ -151,11 +149,9 @@ function create() {
     graphics.fillRect(500 - mazeWidth / 2, 400 - mazeHeight / 2, mazeWidth, mazeHeight);
     graphics.fillStyle(0xffffff, 0);
 
-    // const maskImage2 = graphics.createGeometryMask();
-    // rect.setMask(maskImage2)
+  
 
-// Draw a filled circle at the player's position
-    graphics.fillCircle(player.x, player.y, 30);
+    
 
     circle = this.add.graphics();
    
@@ -167,15 +163,26 @@ function create() {
     circle.strokeCircle(0, 0, 30);
 
 
+   
+
+    // const maskImage2 = graphics.createGeometryMask();
+    // rect.setMask(maskImage2)
+
+// Draw a filled circle at the player's position
+    // graphics.fillCircle(player.x, player.y, 30);
+
+
     const maskImage = circle.createGeometryMask();
-    maskImage.invertAlpha = false;
+    maskImage.invertAlpha = true;
     graphics.setMask(maskImage);
 
 
 
     circle.setPosition(player.x, player.y);
 
-    circle.fillStyle(0xffffff,0);
+    // circle.fillStyle(0xffffff,0);
+
+    // graphics.clear();
 
 
     // player.setBounce(0.2);
