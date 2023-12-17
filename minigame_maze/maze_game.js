@@ -45,7 +45,7 @@ function preload() {
     this.load.image('path_7_lft', 'img/path_7_lft.png');
     this.load.image('path_7_rgt', 'img/path_7_rgt.png');
     this.load.image('path_cross', 'img/path_cross.png');
-    this.load.image('end', 'img/path_end.png');
+    this.load.image('end', 'img/path_vert_up.png');
     this.load.image('path_hori_lft', 'img/path_hori_lft.png');
     this.load.image('path_hori_rgt', 'img/path_hori_rgt.png');
     this.load.image('path_hori', 'img/path_hori.png');
@@ -173,8 +173,8 @@ function create() {
 
 
     const maskImage = circle.createGeometryMask();
-    maskImage.invertAlpha = true;
-    graphics.setMask(maskImage);
+    // maskImage.invertAlpha = true;
+    // graphics.setMask(maskImage);
 
 
 
