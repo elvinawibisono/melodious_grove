@@ -1,12 +1,10 @@
 // Create a Phaser.Game instance
 var config = {
     type: Phaser.CANVAS,
-    // width: window.innerWidth,  // Set the width to the window's width
-    // height: window.innerHeight,
     width: 1000,
     height: 800,
     physics: {
-        default: 'arcade', // Enable Arcade Physics
+        default: 'arcade', 
         arcade: {
             gravity: { y: 0 },
             debug: false
@@ -59,23 +57,16 @@ function preload() {
     this.load.image('path_vert_up', 'img/path_vert_up.png');
     this.load.image('path_vert', 'img/path_vert.png');
     this.load.image('wall', 'img/wall.png');
-    // this.load.spritesheet('girl', '../assets/char free/ari.png', { frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('girl', '../assets/characters/girl_main.png', { frameWidth: 16, frameHeight: 24});
     this.load.audio('backgroundMusic', '../assets/mazegame_music.mp3');
 }
-    // ... load other images ...
-
+  
 
 
 function create() {
-    // Set background color
-    // this.cameras.main.setBackgroundColor('#000000');
 
     music = this.sound.add('backgroundMusic', { loop: true });
     music.play();
-
-    // const blackScreen = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x000000);
-    // blackScreen.setOrigin(0);
 
     // Create maze
     maze = [
@@ -90,7 +81,7 @@ function create() {
     ["path_hori_rgt", "path_hori", "path_T_up", "path_hori_lft", "wall"],
     ];
 
-    tileSize = 200; // Adjust the tile size as needed
+    tileSize = 200; 
 
     // Calculate the total width and height of the maze in pixels
     const mazeWidth = maze[0].length * tileSize;
@@ -100,13 +91,9 @@ function create() {
     startX = centerX - mazeWidth / 2;
     startY = centerY - mazeHeight / 2;
 
-    // this.cameras.main.setBounds(0, -mazeHeight / 2, mazeWidth, mazeHeight);
-    // this.physics.world.setBounds(0, -mazeHeight / 2, mazeWidth, mazeHeight);
 
     this.cameras.main.setBounds(500 - mazeWidth / 2, 400 - mazeHeight / 2, mazeWidth, mazeHeight);
     this.physics.world.setBounds(500 - mazeWidth / 2, 400 - mazeHeight / 2, mazeWidth, mazeHeight);
-
-
 
 
     wallsGroup = this.physics.add.staticGroup();
@@ -119,13 +106,12 @@ function create() {
             const x = startX + col * tileSize + tileSize / 2;
             const y = startY + row * tileSize + tileSize / 2;
 
-            // Create a sprite for each maze element
             const sprite = this.physics.add.sprite(x, y, tile);
-            sprite.setOrigin(0.5); // Set the origin to the center
+            sprite.setOrigin(0.5); 
             this.physics.world.enable(sprite);
 
             if (tile === "wall") {
-                const wallSprite = wallsGroup.create(x, y, 'wall'); // Replace 'path_hori' with the appropriate key
+                const wallSprite = wallsGroup.create(x, y, 'wall'); 
                 wallSprite.setOrigin(0.5);
             }
 
@@ -133,15 +119,11 @@ function create() {
         }
     }
 
-
-   
-
-
-    // player = this.physics.add.sprite(centerX, centerY, 'girl');
+ 
     player = this.physics.add.sprite(673, 1173, 'girl');
     player.setOrigin(0.5);
     player.setScale(2);
-    // player.setBounce(0.2);
+
 
     var graphics = this.add.graphics();
 
@@ -151,42 +133,17 @@ function create() {
     graphics.fillStyle(0xffffff, 0);
 
   
-
-    
-
+    // Create a circle surrounding player 
     circle = this.add.graphics();
    
-    // circle.fillStyle(0xffffff, 0); // 0x000000 is black color, 0 is transparency
     circle.fillStyle(0xffffff,0);
-    // circle.fillCircle(player.x, player.y, 30);
     circle.fillCircle(0, 0, 30); 
-    circle.lineStyle(2, 0xffffff, 1); // Set line style (2 is the line width), use lineStyle instead of fillStyle
+    circle.lineStyle(2, 0xffffff, 1); 
     circle.strokeCircle(0, 0, 30);
-
-
-   
-
-    // const maskImage2 = graphics.createGeometryMask();
-    // rect.setMask(maskImage2)
-
-// Draw a filled circle at the player's position
-    // graphics.fillCircle(player.x, player.y, 30);
-
-
-    const maskImage = circle.createGeometryMask();
-    // maskImage.invertAlpha = true;
-    // graphics.setMask(maskImage);
-
 
 
     circle.setPosition(player.x, player.y);
 
-    // circle.fillStyle(0xffffff,0);
-
-    // graphics.clear();
-
-
-    // player.setBounce(0.2);
     this.physics.world.enable(player, true, 0.5, 0.5);
     player.setCollideWorldBounds(true);
 
@@ -196,6 +153,7 @@ function create() {
     this.physics.world.debugDrawBody = true;
     this.physics.world.debugDrawStatic = true;
 
+    // Configure animations of the sprite 
     this.anims.create({
         key: 'right',
         frames: this.anims.generateFrameNumbers('girl', { frames: [2, 10, 18] }),
@@ -210,9 +168,6 @@ function create() {
         repeat: -1
     });
 
-
-   
-    // Configure animations
     this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('girl', { frames: [6, 14, 22] }),
@@ -233,23 +188,15 @@ function create() {
         frameRate: 20
     });
 
-    
-
+    // get the keyboard input 
     cursors = this.input.keyboard.createCursorKeys();
 
 
-    console.log(player.x)
-
-    rays = [];
-
-    for (let i = 0; i < 360; i += 1) {
-        const radians = Phaser.Math.DegToRad(i);
-        const ray = new Phaser.Geom.Line(player.x, player.y, player.x + Math.cos(radians) * 1000, player.y + Math.sin(radians) * 1000);
-        rays.push(ray);
-    }
 
 }
 
+// update the game, based on the changes done for the game
+// change the animation and volume 
 function update (){
 
     if (cursors.left.isDown)
@@ -292,42 +239,24 @@ function update (){
     circle.x = player.x;
     circle.y = player.y;
 
-    console.log(maze[3][0])
-
-    destination = maze[3][0]
-
     const endTileRow = 1;
     const endTileCol = 4;
     const endTileX = startX + endTileCol * tileSize + tileSize / 2;
     const endTileY = startY + endTileRow * tileSize + tileSize / 2;
     
-
+    // calculate the volume 
     var distance = Phaser.Math.Distance.Between(player.x, player.y, endTileX, endTileY);
     var volume = Phaser.Math.Clamp(1 - distance / distanceThreshold, 0, 1);
 
-    // music.context.volume.setValueAtTime(volume, this.sound.game.audioContext.currentTime);
-
+    // set the music volume based on the calculated volume 
     music.setVolume(volume);
-
-    console.log("Player Coordinates:", player.x, player.y);
-    console.log("Destination Coordinates:", endTileX, endTileY);
-    console.log("Distance:", distance);
-    console.log("Calculated Volume:", volume);
-
-    
-    console.log("Camera Bounds:", this.cameras.main.worldView);
-
-
-   
-
 
     const playerRow = Math.floor((player.y - startY) / tileSize);
     const playerCol = Math.floor((player.x - startX) / tileSize);
 
+    // destination tile 
     if (maze[playerRow][playerCol] === "end" && !reachedEnd) {
         reachedEnd = true;
-        // window.alert('Congratulations! You reached the end of the maze!');
-        // player.setPosition(startX + playerCol * tileSize + tileSize / 2, startY + playerRow * tileSize + tileSize / 2);
         document.getElementById('nextGamePopup').style.display = 'block';
     }
 }
@@ -338,14 +267,3 @@ function startNextGame() {
 }
 
 
-// function getRayIntersection(ray) {
-//     const hitWalls = wallsGroup.getChildren().filter(wall => Phaser.Geom.Intersects.LineToRectangle(ray, wall.getBounds()));
-//     if (hitWalls.length > 0) {
-//         const bounds = hitWalls[0].getBounds();
-//         const center = { x: bounds.centerX, y: bounds.centerY };
-//         return center;
-//     } else {
-//         return null;
-//     }
-
-// }
