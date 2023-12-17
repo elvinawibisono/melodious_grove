@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // story here
     const storyTexts = ["Yay! We did it ! We are inside the forest now. Let's find the first ingredient: the stone mushroom!", 
-                       "Hmm, rumour has it that the it grows around the goblin cave, I wonder where is it..", 
+                       "Hmm, rumour has it that it grows around the goblin cave, I wonder where is it..", 
                         "OOOH!! AHHHHHH!!!!", 
                         "Oh no! We fell down a hole. What should we do?"];
     let currentTextIndex = 0;
