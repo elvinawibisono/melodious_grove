@@ -22,7 +22,6 @@
                 height: 75px;
             }
 
-              /* Styles for the overlay background */
             .overlay {
                 display: none;
                 position: fixed;
@@ -30,10 +29,9 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black overlay */
+                background-color: rgba(0, 0, 0, 0.7);
             }
 
-            /* Styles for the modal */
             .modal {
                 display: none;
                 position: fixed;
@@ -65,7 +63,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black overlay */
+                background-color: rgba(0, 0, 0, 0.7); 
             }
             .instruction {
                 display: none;
@@ -79,7 +77,6 @@
                 z-index: 2;
             }
 
-            /* Style to close button */
             .welcome-close-btn {
                 cursor: pointer;
             }
@@ -110,13 +107,10 @@
     </head>
 
     <body>
-
-        <!-- Overlay background -->
         <div id="welcomeOverlay" class="welcome-overlay"></div>
 
-        <!-- Modal content -->
         <div id="welcomeModal" class="welcome-modal">
-            <span class="welcome-close-btn" onclick="closeWelcomeModal()">&times;</span> <!-- &times; is an "x" character for close button -->
+            <span class="welcome-close-btn" onclick="closeWelcomeModal()">&times;</span> 
             <div class="center-container">
                 <h1>Welcome</h1>
                 <p>Welcome, young one. It seems you have made it to the third minigame; however, you must open these three boxes. Each box opens up when you play a tune. Using your keyboard, you must play the tunes to open each box. I will play you a sequence of notes, and you must play it back in the exact order. Play all 3 sucessfully, and I can give you the last three ingredients you need! </p>
@@ -126,18 +120,17 @@
             </div>
         </div>
 
-        <!-- Overlay background -->
         <div id="instructionOverlay" class="overlay"></div>
 
         <div id="instructionModal" class="modal">
-            <span class="instruction-close-btn" onclick="closeInstructionModal()">&times;</span> <!-- &times; is an "x" character for close button -->
+            <span class="instruction-close-btn" onclick="closeInstructionModal()">&times;</span> 
             <h1>Instructions</h1>
         </div>
 
         <div id="refOverlay" class="overlay"></div>
 
         <div id="refModal" class="instruction">
-            <span class="ref-close-btn" onclick="closeRef()">&times;</span> <!-- &times; is an "x" character for close button -->
+            <span class="ref-close-btn" onclick="closeRef()">&times;</span> 
             <img id="keyboard" src="ref_keyboard.png" alt="Keyboard" width="1500" height="700">
         </div>
 
@@ -146,13 +139,11 @@
         <div id="retryModal" class="modal">
             <h1>Not quite!</h1>
             <p>This one is pretty tricky... try again with another combination! </p>
-            <button id="retryButton"> Retry</button> <!-- &times; is an "x" character for close button -->
+            <button id="retryButton"> Retry</button> 
         </div>
 
-
-        <!-- Win, next level -->
         <div id="win_level1" class="modal">
-            <button id="nextlevel" onclick="nextLevelButton1()"> Next level</button> <!-- &times; is an "x" character for close button -->
+            <button id="nextlevel" onclick="nextLevelButton1()"> Next level</button> 
             <div class="center-container">
                 <h1>Congratulations! Round 1 COMPLETE.</h1>
                 <p>Wow, that one was tricky! You have opened the first box and have accessed the seeds. But the journey isn't over yet! You still have two boxes. The next box will be a bit more tricky, with more notes included (C, D, E, F, G, A, B). This gives you a variation of 12 notes instead of 5. There will still be 7 different notes played. Are you ready? </p>
@@ -162,7 +153,7 @@
 
 
         <div id="win_level2" class="modal">
-            <button id="nextlevel" onclick="nextLevelButton2()"> Next level</button> <!-- &times; is an "x" character for close button -->
+            <button id="nextlevel" onclick="nextLevelButton2()"> Next level</button>
             <div class="center-container">
                 <h1>Whoa! Round 2 COMPLETE.</h1>
                 <p>You sure have a knack for opening boxes! Here are the sprouts you were looking for. That one was close! Good thing you only have one more box left! The last box will contain all of the notes, totaling 24 variations. There will still be 7 different notes played. Click "Next level" when ready. </p>
@@ -222,13 +213,11 @@
     </body>
 
     <script>
-        // Function to open the modal and overlay
         function openWelcomeModal() {
           document.getElementById("welcomeOverlay").style.display = "block";
           document.getElementById("welcomeModal").style.display = "block";
         }
 
-        // Function to open the modal and overlay
         function nextLevelButton1() {
           document.getElementById("win_level1").style.display = "none";
           document.getElementById("nextLevelOverlay").style.display = "none";
@@ -238,33 +227,27 @@
           document.getElementById("win_level2").style.display = "none";
           document.getElementById("nextLevelOverlay").style.display = "none";
         }
-    
-        // Function to close the modal and overlay
+
         function closeWelcomeModal() {
           document.getElementById("welcomeOverlay").style.display = "none";
           document.getElementById("welcomeModal").style.display = "none";
         }
 
-        // Function to open the modal and overlay
         function openInstructionModal() {
           document.getElementById("instructionOverlay").style.display = "block";
           document.getElementById("instructionModal").style.display = "block";
         }
     
-        // Function to close the modal and overlay
         function closeInstructionModal() {
           document.getElementById("instructionOverlay").style.display = "none";
           document.getElementById("instructionModal").style.display = "none";
         }
 
-
-        // Function to open the modal and overlay
         function openRef() {
           document.getElementById("refOverlay").style.display = "block";
           document.getElementById("refModal").style.display = "block";
         }
-    
-        // Function to close the modal and overlay
+        
         function closeRef() {
           document.getElementById("refOverlay").style.display = "none";
           document.getElementById("refModal").style.display = "none";

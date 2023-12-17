@@ -1,24 +1,15 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
     var audioCtx2;
-    //const waveform = document.getElementById("waveform");
-    //const dot = document.getElementById('dot');
-
     var audioCtx;
     var osc;
     var timings;
     var generatedNotes = [];
     const playButton = document.getElementById('playButton');
-
     const retryButton = document.getElementById('retryButton');
-
     var canPlay = false;
-
-    
-
     var countUserPlayed = 0;
     var userNotes = [];
-
     var level = 1;
 
     const keyboardFrequencyMap = {
@@ -139,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         audioCtx2 = new (window.AudioContext || window.webkitAudioContext)();
         osc = audioCtx.createOscillator();
         const wave = "sine";
-        osc.type = wave; //choose your favorite waveform
+        osc.type = wave; 
         timings = audioCtx.createGain();
         timings.gain.value = 0;
         osc.connect(timings).connect(audioCtx.destination);
@@ -147,7 +138,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         
         // Assuming user interaction triggers the audio
         document.addEventListener('click', function () {
-            //playNoteTest(keyboardFrequencyMap['67']);
             scheduleAudio();
 
         });
@@ -165,7 +155,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
             osc.frequency.setValueAtTime(keyboardFrequencyMap[noteData], audioCtx.currentTime + timeElapsedSecs, 0.01);
             timings.gain.setTargetAtTime(1, audioCtx.currentTime + timeElapsedSecs, 0.01);
-            //osc.frequency.setValueAtTime(noteData, audioCtx.currentTime + timeElapsedSecs, 0.01);
             timeElapsedSecs += 1;
             timings.gain.setTargetAtTime(0, audioCtx.currentTime + timeElapsedSecs, 0.01);
             timeElapsedSecs += 0.2; // rest between notes
@@ -191,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var randomValue = Math.floor(Math.random() * (numNotes)) + 1;
             notes.push(indexToFreq[randomValue]);
           }
-        //return ['67', '67', '67', '67','67','67','67']
+        //return ['67', '67', '67', '67','67','67','67'] // For debugging purposes
         return notes;
     }
 
@@ -328,7 +317,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
             setTimeout(function () {
                 dot.style.display = 'none';
-            },  timeToPlay+ 1 * 1000); // Convert seconds to milliseconds
+            },  timeToPlay+ 1 * 1000); 
 
         }
 
@@ -369,21 +358,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
         
         const osc = audioCtx2.createOscillator();
         const wave = "sine";
-        osc.type = wave //choose your favorite waveform
+        osc.type = wave;
 
-        //Follow the instructions here
         const gainNode = audioCtx2.createGain(); //this will control the volume of all notes
         osc.frequency.setValueAtTime(keyboardFrequencyMap[key], audioCtx2.currentTime)
 
         gainNode.gain.setValueAtTime(0.001, audioCtx2.currentTime)
         osc.connect(gainNode).connect(audioCtx2.destination);
         
-
-        //gainNode.gain.exponentialRampToValueAtTime(0.5, audioCtx.currentTime + 0.001);
         gainNode.gain.setTargetAtTime(0.4, audioCtx2.currentTime + 0.01, 0.2);
 
-        //
-        //osc.connect(audioCtx.destination)
         osc.start();
         activeOscillators[key] = osc;
         activeGains[key] = gainNode;
@@ -399,8 +383,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
     function releaseStep(key){
-        //const releaseTime = audioCtx.currentTime + 0.1; 
-
         activeGains[key].gain.cancelScheduledValues(audioCtx2.currentTime);
         activeGains[key].gain.exponentialRampToValueAtTime(0.001, audioCtx2.currentTime + 0.1);
         activeGains[key].gain.setTargetAtTime(0.001, audioCtx2.currentTime, 0.01); 

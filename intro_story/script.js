@@ -56,5 +56,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function handleHiddenButtonClick() {
-    window.location.href = '../minigame1.html';
+    window.location.href = '../minigame_maze/maze.html';
 }
