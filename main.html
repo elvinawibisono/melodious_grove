@@ -11,9 +11,10 @@
   <div id="blog-section">
     <h2>Overview</h2>
 
-    <a href="https://elvinawibisono.github.io/melodious_grove/intro_story/intro.html">Melodious Grove</a>
-
+    <button onclick="goToIntro()">Go to Game</button>
     <p>Click the link above to play the game!</p>
+
+    <p>Developed by: Elvina Wibisono, Luci Feinberg, Elifia Muthia</p>
 
     <p>
       This game follows a young girl, Ari, as she journeys into the Melodious Grove, a mysterious forest, to complete a series of musical tasks in order to obtain ingredients to make a magic potion to save her grandma.
@@ -23,24 +24,65 @@
     
     <h2>Intro</h2>
 
+    <button onclick="goToIntro()">Intro</button>
+
     <p>
-      The game opens with an introductory story. The user is introduced to Ari and is told of her main goal of the game.
+      The game opens with an introductory story. The user is introduced to Ari and is told the main goal of the game.
       We were inspired by old games we grew up to, like Pokemon, and to match that aesthetic, we have a visual of Ari as a pixellated game character
       and changed the font to match. The story is told with a typewriter effect and the user can press 'ENTER' to get the next line 
-      of texts, just like in Pokemon. On the 
+      of texts, just like in Pokemon. On the top left of the screen is a speaker button that could be toggled to mute the background music, and when retoggled,
+      it will play the music again.
     </p>
+
+    <p>A WebAudio technique that we integrated here was how to work with audio files.</p>
 
     <h2>Minigame 1 - Echo Direction</h2>
     <button onclick="goToMiniGame1()">Minigame 1</button>
 
+
+    <p></p>
     <h2>Minigame 2 - Frequency Matching</h2>
     <button onclick="goToMiniGame2()">Minigame 2</button>
+    <h3>Goal</h3>
+      <p>For this game, we wanted to explore new WebAudio techniques that we never got to implement in class such as working with a different audio input, particularly microphone.
+        We knew we wanted to work with frequency and pitch in this minigame and thought that making the user sing into the microphone will make the game a lot more interactive than 
+        an alternative we considered which was to use the space bar to control the pitch.
+      </p>
+        <p>In this game, a randomly generated pitch range of 100Hz will be selected from the range 150-500Hz that the user will then have to find and sing. The game is divided into 3 levels 
+          where the user is asked to sing 3 times with different target pitch ranges. The user will then have to hold that pitch for a few moments before going to the next level. Hint: try humming 
+          the notes, I find that the microphone picks up frequency much better that way.
+        </p>
+        
+      <h3>Challenges</h3>
+     <p>
+      The first challenge that I faced was how to pick up the frequencies from the microphone as it didn't turn out to be as straightforward as I expected. After doing some research, I found a helpful 
+      <a href="https://stackoverflow.com/questions/69237143/how-do-i-get-the-audio-frequency-from-my-mic-using-javascript">Stack Overflow post</a> outlining the many subproblems that come with pitch detection.
+      The biggest one for me was finding a numeric representation of the single fundamental frequency where it was suggested I used the autocorrolation method. I followed the implementation of the autocorrolation signal and understood 
+      that after preprocessing the signal, we could then find the average distance between maxima in the signal to identify the period and along with the sample rate, calculate the frequency of the identified signal. This implementation was 
+      not perfect but I found to be a good enough solution for our purposes in identifying pitch.
+     </p>
+      <p>Working with microphone input turns out to be much more challenging than I expected as there is a lot of background noise that gets picked up by the microphone that is making the bar in the game
+        too sensitive. I specifically noticed that the microphone keeps picking up really high frequencies (around 2000Hz) that is getting picked up by the pitch bar in the game instead of the user's pitch that is being sung.
+        I also noticed that there are low frequencies disrupting the signal although it doesn't bother the pitch bar as much as the high frequencies do but nevertheless, should be filtered out as well.
+        I knew that I'll have to filter out these background noise and so I implemented both high pass and low pass filters to filter out frequencies that are above 600Hz and ones that are below 50 Hz.
+        After implementing these filters, the pitch bar seems to pick up the user's voice better and when comparing it with another pitch detection app, the frequencies that are being picked up by the game is 
+        more similar to the app. The game is in no way perfect in filtering out background noise but it is definitely not as sensitive to non-human-voice sounds than it was previously.
+      </p>
+
+      <h3>Choices</h3>
+      <ul>
+        <li>Pitch detection: We wanted to demonstrate new WebAudio techniques and concepts along with the ones we learned. In this minigame, we showed how to work with microphone audio input, working with highpass and lowpass filters,
+          and working with processing audio signals to extract frequencies by using the autocorrolation method.
+        </li>
+        <li>3 levels: This minigame will consist of three levels of differently generated pitch ranges that the user will need to find and match.</li>
+      </ul>
     
+    <p></p>
     <div>
       <h2>Minigame 3 - Memory Pattern</h2>
       <button onclick="goToMiniGame3()">Minigame 3</button>
       <h3>Goal</h3>
-      <p>For this game, we wanted to use the ASMR enveloping feature, which is something we wanted to improve from our past homeworks that had clicking. 
+      <p>For this game, we wanted to use the ADSR enveloping feature, which is something we wanted to improve from our past homeworks that had clicking. 
         Intiially, we were ambitious as we wanted to change the oscillators and the waveform, and have other instruments other than a piano. This would have
         been similar implementation as the benchmark we already have for the piano sequence; however, it would have been significantly more front-end, which 
         seemed out of the scope of this particular assignment. </p>
@@ -71,12 +113,40 @@
       </ul>
     </div>
 
+    <div>
+      <h2>Live-Coding: Background Music</h2>
+
+      <h3>Intro-background</h3>
+      <p>The inspiration for this came from wanting to replciate the sound of a forest. Because it is a mysterious, melodious grove, we wanted the bass and melody to contribute to an eerie feeling, while incorporating a feeling
+        of being in nature. With this, we implemented different sounds while live coding, such as cawing of birds, wind-chimes, and trying to replicate the sound of wind and leaves rustling. This gives the intro sequence a very
+        sppoky feeling, which is the theme of the game. Despite this, we wanted to keep it relatively upbeat to match the tone of general video games.
+      </p>
+      <img src="assets/livecode/mainmusic_code_1.png" width="30%" >
+      <img src="assets/livecode/mainmusic_code_2.png" width="25%">
+
+      <h3>Minigame 1: Maze-music</h3>
+      <p>For this game, we wanted to keep the theme of a forest going. But this one is more spooky, as the player is in the dark. Because of this, we wanted to mimic the sound of birds "chirping" to instill that the user is 
+        still in the woods; however, we wanted to keep the theme of video-game music. The high-pitch melody is supposed to mimic birds chirping to try and help the user get through the sound maze.
+        To keep the general sound of a video game, we wanted to keep a techno beat. </p>
+        <img src="assets/livecode/mazemusic_1.png" width="25%" >
+        <img src="assets/livecode/mazemusic_2.png" width="25%">
+        <img src="assets/livecode/mazemusic_3.png" width="28%">
+    </div>
+
     <h2>Outro</h2>
+    <button onclick="goToOutro()">Outro</button>
+    The outro is meant to let the user know that they have completed all the minigames and collected all the ingredients needed to make the health potion. It is set 
+    up very similarly to the intro, such as allowing the users to mute and unmute the background music.
+
 
 </div>
 </body>
 
 <script>
+  function goToIntro(){
+    window.location.href = 'intro_story/intro.html';
+  }
+
   function goToMiniGame1(){
     window.location.href = 'minigame_maze/maze.html';
   }
@@ -87,6 +157,10 @@
 
   function goToMiniGame3(){
     window.location.href = 'minigame3_luci/transition.html';
+  }
+
+  function goToOutro(){
+    window.location.href = 'outro/outro.html';
   }
 </script>
 
