@@ -18,6 +18,13 @@ body {
     margin-left: 200px;
 }
 
+.left-Button{
+  text-align: left;
+  position: absolute;
+  right:    0;
+  bottom:   0;
+}
+
 .character-image img {
     max-width: 100%;
     height: auto;

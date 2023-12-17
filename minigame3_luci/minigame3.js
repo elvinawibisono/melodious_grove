@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var countUserPlayed = 0;
     var userNotes = [];
     var level = 1;
+    var keyIsDown = false;
 
     //Map to keyboard to the actually frequency (for piano)
     const keyboardFrequencyMap = {
@@ -161,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             
 
             osc.frequency.setValueAtTime(keyboardFrequencyMap[noteData], audioCtx.currentTime + timeElapsedSecs, 0.01);
-            timings.gain.setTargetAtTime(1, audioCtx.currentTime + timeElapsedSecs, 0.01);
+            timings.gain.setTargetAtTime(0.5, audioCtx.currentTime + timeElapsedSecs, 0.01);
             timeElapsedSecs += 1;
             timings.gain.setTargetAtTime(0, audioCtx.currentTime + timeElapsedSecs, 0.01);
             timeElapsedSecs += 0.2; // rest between notes
@@ -170,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         setTimeout(function () {
             canPlay = true;
             console.log("canPlay: ", canPlay)
-        }, 1000 * 8);
+        }, 1000 * 6);
 
     }
 
@@ -185,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             numNotes = 24;
         }
         notes = []
-        for (var i = 0; i < 7; i++) {
+        for (var i = 0; i < 5; i++) {
             var randomValue = Math.floor(Math.random() * (numNotes)) + 1;
             notes.push(indexToFreq[randomValue]);
           }
@@ -278,24 +279,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     //This is for when the person is typing into the keyboard
     function keyDown(event) {
-        if(canPlay == false){
+        if(canPlay == false || keyIsDown == true){
             return
         }
+
+        keyIsDown = true;
+
         const key = (event.detail || event.which).toString();
 
         countUserPlayed += 1
         userNotes.push(key)
-        if(countUserPlayed >= 7){
-            var eval = evaluateGame();
-            if(eval == true){
-                nextLevel();
-                canPlay = false;
-            }
-            else{
-                retryLevel();
-                canPlay = false;
-            }
-        }
         if(countUserPlayed <= 7){
 
             if (keyboardFrequencyMap[key] && !activeOscillators[key]) {
@@ -355,6 +348,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     //Mechanism for when key is lifted
     function keyUp(event) {
+
+        if(countUserPlayed >= 5){
+            var eval = evaluateGame();
+            if(eval == true){
+                nextLevel();
+                canPlay = false;
+            }
+            else{
+                retryLevel();
+                canPlay = false;
+            }
+        }
+        
+        keyIsDown = false;
         const key = (event.detail || event.which).toString();
         if (keyboardFrequencyMap[key] && activeOscillators[key]) {
             releaseStep(key);
