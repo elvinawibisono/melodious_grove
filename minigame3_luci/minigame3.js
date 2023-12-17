@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
+    //Keep track of instance variables
     var audioCtx2;
     var audioCtx;
     var osc;
@@ -12,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var userNotes = [];
     var level = 1;
 
+    //Map to keyboard to the actually frequency (for piano)
     const keyboardFrequencyMap = {
         '90': 261.625565300598634,  //Z - C
         '83': 277.182630976872096, //S - C#
@@ -39,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         '85': 987.766602512248223,  //U - B
     }
 
+    //This gives the index in order to iterate incrementally through the list
     const indexToFreq = {
         1: '90',  //Z - C
         2: '83', //S - C#
@@ -66,6 +69,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         24: '85',  //U - B
     }
 
+    //Gives the various positions on the piano
+    //THese values must be manually inserted
     const positionMap = {
         '90': 0.0,  //Z - C
         '83': 0.5, //S - C#
@@ -93,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         '85': 13.0,  //U - B
     }
 
+    //Holds information for each inidivdual dot
     const dots = {
         '90': document.getElementById('dot'),  //Z - C
         '83': document.getElementById('dot2'), //S - C#
@@ -125,6 +131,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     activeOscillators = {}
     activeGains = {}
 
+    //This is primarily to generate all of the audio contexts when the game fully initializes
     function initAudio() {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         audioCtx2 = new (window.AudioContext || window.webkitAudioContext)();
@@ -167,6 +174,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     }
 
+    //code that generates the random 7 notes, ddepending on how many levels there are
+    // It uses indexToFreq to get the random variables
     function generateRandomNotes() {
         numNotes = 5;
         if(level == 2){
@@ -184,6 +193,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         return notes;
     }
 
+    //Helper functions
     function genAudio(data) {
         generatedNotes = data;
     }
@@ -230,8 +240,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         generatePattern();
     });
 
-
-
+    //Interacts with HTML to allow the overlays and menus to load
     function nextLevel(){
 
         if(level >= 3){
@@ -267,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById("retryModal").style.display = "block";
     }
 
-
+    //This is for when the person is typing into the keyboard
     function keyDown(event) {
         if(canPlay == false){
             return
@@ -304,6 +313,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
     }
 
+    //Displays the note on the screen
     function showNote(key, timeToPlay){
         if(keyboardFrequencyMap[key]){
             const dot = dots[key];
@@ -323,6 +333,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     }
 
+    //checks whether the played note is the same
     function evaluateGame(){
         var same = true;
 
@@ -342,6 +353,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         return same
     }
 
+    //Mechanism for when key is lifted
     function keyUp(event) {
         const key = (event.detail || event.which).toString();
         if (keyboardFrequencyMap[key] && activeOscillators[key]) {
@@ -351,6 +363,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
     }
 
+    //The audio generation
     function playNote(key) {
         if(activeOscillators[key]){
             releaseStep(key);
@@ -381,7 +394,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         gainNode.gain.setTargetAtTime(0.4/ length,audioCtx2.currentTime + 0.01,0.2); 
     }
 
-
+    //deals with the ASDR enveloping for when the key is lifted
     function releaseStep(key){
         activeGains[key].gain.cancelScheduledValues(audioCtx2.currentTime);
         activeGains[key].gain.exponentialRampToValueAtTime(0.001, audioCtx2.currentTime + 0.1);
