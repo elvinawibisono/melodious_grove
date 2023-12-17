@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         osc.start();
         
         // Assuming user interaction triggers the audio
-        document.addEventListener('click', function () {
+        document.getElementById("playButton").addEventListener('click', function () {
             scheduleAudio();
 
         });
@@ -360,7 +360,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 canPlay = false;
             }
         }
-        
+
         keyIsDown = false;
         const key = (event.detail || event.which).toString();
         if (keyboardFrequencyMap[key] && activeOscillators[key]) {
