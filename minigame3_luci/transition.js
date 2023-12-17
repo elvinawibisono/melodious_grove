@@ -6,7 +6,7 @@ let isTyping = false;
 storyTexts = ["We made it past the forest! But it looks like we still need 3 main ingredients.",
         "We have come across these three chests! All I know is that they hold the remaining secret ingredients we need to bring to grandma! Please help me open them!",
         "In order to open the chests, you must remember and open them using the power of music! You must memorize a sequence of patterns that will be played for you, and then play it back using your computer's keyboard.",
-        "When we start, you must press PLAY. There will be 7 notes played for you, ranging from 5 different notes(first box), 12 different notes (second box), or 24 different notes (third box), based on level. ",
+        "When we start, you must press PLAY. There will be 5 notes played for you, ranging from 5 different notes(first box), 12 different notes (second box), or 24 different notes (third box), based on level. ",
         "Good luck cracking the boxes!"]
 
 postGameStory = ["Yay you did it! You helped me obtain the ingredient. Thank you!",
@@ -49,11 +49,16 @@ document.addEventListener('keydown', function (event) {
 });
 
 var playButton = document.getElementById("hiddenButton");
+var skipButton = document.getElementById("skipButton");
 
 playButton.addEventListener('click', function () {
   goToNextPage();
 });
 
+
+skipButton.addEventListener('click', function () {
+  goToNextPage();
+});
 
 function goToNextPage() {
   window.location.href = 'minigame3.html';
