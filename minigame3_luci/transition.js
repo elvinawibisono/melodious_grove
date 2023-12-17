@@ -49,11 +49,16 @@ document.addEventListener('keydown', function (event) {
 });
 
 var playButton = document.getElementById("hiddenButton");
+var skipButton = document.getElementById("skipButton");
 
 playButton.addEventListener('click', function () {
   goToNextPage();
 });
 
+
+skipButton.addEventListener('click', function () {
+  goToNextPage();
+});
 
 function goToNextPage() {
   window.location.href = 'minigame3.html';
