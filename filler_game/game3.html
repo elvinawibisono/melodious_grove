@@ -1,0 +1,51 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Visualization</title>
+    <style>
+        /* canvas {
+            display: block;
+            margin: auto;
+            
+        } */
+
+        canvas {
+            display: block;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+
+        body {
+            margin: 0;
+            background: url('../assets/forest_background.gif') center center no-repeat;
+            overflow: hidden;
+        }
+
+        #background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1; 
+        }
+        
+
+    </style>
+</head>
+<body>
+    <img id="background-image" src="../assets/forest background.gif" alt="Background Image">
+    <canvas id="audioCanvas" width="1000" height="500"></canvas>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/tonal/browser/tonal.min.js"></script> -->
+
+
+    <script src="game3.js"></script>
+</body>
+</html>
