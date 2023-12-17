@@ -334,7 +334,7 @@ function update (){
 
 
 function startNextGame() {
-    window.location.href = '../transition_story/first_story.html';
+    window.location.href = '../transition_story/third_story.html';
 }
 
 
