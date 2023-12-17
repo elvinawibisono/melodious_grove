@@ -13,8 +13,9 @@ body {
 }
 
 .character-image {
-    width: 500px;
-    margin-right: 20px; 
+    width: 200px;
+    margin-right: 150px; 
+    margin-left: 200px;
 }
 
 .character-image img {
@@ -36,7 +37,7 @@ body {
 .story {
     font-size: 18px;
     white-space: pre-wrap; 
-    border-right: 2px solid #fff;
+    border-right: 2px solid green;
     overflow: hidden;
     line-height: 1.5;
     flex-shrink: 0; 
