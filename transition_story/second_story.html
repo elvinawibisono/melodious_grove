@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style2.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+  <title>Melodious Grove</title>
+
+  <style>
+    
+</style>
+
+</head>
+<body>
+
+  <audio id = "backgroundMusic" autoplay loop>
+    <source src="../assets/videogame_music_FINAL.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<img id="background-image" src="../assets/front of the forest .jpg" alt="Background Image">
+
+<img id="toggleButton" src="../assets/icon-unmuted-white.png" alt="Toggle Button" onclick="toggleMute()">
+
+  <div class="game-container">
+    <div class="character-image">
+      <img class="character-image" src="../assets/characters/girl.gif" alt="Game Character">
+    </div>
+    <div class="story-container">
+      <div id="story" class="story"></div>
+    </div>
+    <button id="hiddenButton" class="hidden" onclick="handleHiddenButtonClick()">Continue</button>
+  </div>
+
+  <div id="instructionNote">Press Enter to Continue</div>
+  <script src="second_story.js"></script>
+</body>
+</html>

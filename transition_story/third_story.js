@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // story here
-    const storyTexts = ["Hi, my name is Ari!", 
-                        "My grandma is dying and I need your help to save her.", 
-                        "I need to find the ingredients to make a magic potion that could heal her.",
-                        "But, the ingredients are hidden in the MELODIOUS GROVE, a mysterious forest that I've only heard of in stories!",
-                        "Please help me find my way around the MELODIOUS GROVE and save my grandma!!!"];
+    const storyTexts = ["Yay! We did it ! We got the stone mushroom!", 
+                       "Four more ingredients to go!!", 
+                        "Next Ingredient is the ApplePear fruit!", 
+                        "The book says we can find it at the SINGING TREES!", 
+                    "LETS GO!"];
     let currentTextIndex = 0;
     let isTyping = false;
 
@@ -66,5 +66,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // controller for the button that will direct the user to the first minigame
 function handleHiddenButtonClick() {
-    window.location.href = '../transition_story/first_story.html';
+    window.location.href = '../minigame2_elifia/minigame2.html';
 }

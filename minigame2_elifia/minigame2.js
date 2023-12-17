@@ -28,7 +28,7 @@ storyTexts = ["Hmm, I think we have reached the famous SINGING TREES of the MELO
         "Above me is a bar that will show you the pitch when you sing into the microphone. When you find the correct pitch range, the bar will turn green. You'll need to hold that note and sing within that pitch range for a few seconds before we get any response from the trees.",
         "Good luck! You can do this."]
 
-postGameStory = ["Yay you did it! You helped me obtain the ingredient. Thank you!",
+postGameStory = ["Yay you did it! You helped me obtain the ApplePear fruit. Thank you!",
                 "Now, let's find the other ingredients!"]
 
 console.log(targetPitchMin, ' ', targetPitchMax);
@@ -264,7 +264,7 @@ function startNextLevel() {
 
 // goes to the next minigame
 function goToNextPage() {
-  window.location.href = '../minigame3_luci/transition.html';
+  window.location.href = '../transition_story/fourth_story.html';
 }
 
 // go through the story texts to tell the user the story

@@ -5,30 +5,33 @@
    <!-- <link rel="stylesheet" href="maze.css"> -->
    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
 
+   <style>
+
+
+   #nextGamePopup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+   </style>
+
+
+
 </head>
 
 <body>
-
-  <!-- <div class="wrap">
-      <div class="main">
-         <div class="container"></div>
-         <div class="intro">
-            <div>
-               Welcome to the maze! Find the way out using the arrow keys. Good luck!
-               <div class="btn_start">start</div>
-            </div>
-         </div>
-      </div>
-
-      <br>
-      <br>
-      <div style="font-size: 15px;">Move through the maze game and find the end point by using the arrow keys on your keyboard.</div>
-      <p style="font-size: 12px;">For the full step by step tutorial, check this link:<a href="https://uipencil.com/2023/04/12/how-to-build-a-mini-maze-game-using-html-css-and-javascript/">click me - back to tutorial</a> </p>
-      <br>
-      <br>
-
-      <p style="font-size: 10px;">Copyright © 2023 UiPencil all rights reserved.</p>
-  </div> -->
+    <div id="nextGamePopup" style="display: none;">
+        <p>Congratulations! You won! Click below to start the next game:</p>
+        <button onclick="startNextGame()">Next Game</button>
+    </div>
 
   <script src="maze_game.js"></script>
 

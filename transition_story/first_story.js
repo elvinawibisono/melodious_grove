@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // story here
-    const storyTexts = ["Hi, my name is Ari!", 
-                        "My grandma is dying and I need your help to save her.", 
-                        "I need to find the ingredients to make a magic potion that could heal her.",
-                        "But, the ingredients are hidden in the MELODIOUS GROVE, a mysterious forest that I've only heard of in stories!",
-                        "Please help me find my way around the MELODIOUS GROVE and save my grandma!!!"];
+    const storyTexts = ["Thank you for helping me!", 
+                        "I am confident that I am able to save my grandma with your help", 
+                        "We need to get 5 ingredients from the MELODIOUS GROVE, to make the potion",
+                        "Which are : the Applepear fruit, the stone mushroom, and three mystery ingredients from the treasure chests inside the elf cave",
+                        "Let's go!! "];
     let currentTextIndex = 0;
     let isTyping = false;
 
@@ -66,5 +66,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // controller for the button that will direct the user to the first minigame
 function handleHiddenButtonClick() {
-    window.location.href = '../transition_story/first_story.html';
+    window.location.href = 'second_story.html';
 }

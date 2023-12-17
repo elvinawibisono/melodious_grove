@@ -23,11 +23,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // story here
-    const storyTexts = ["Hi, my name is Ari!", 
-                        "My grandma is dying and I need your help to save her.", 
-                        "I need to find the ingredients to make a magic potion that could heal her.",
-                        "But, the ingredients are hidden in the MELODIOUS GROVE, a mysterious forest that I've only heard of in stories!",
-                        "Please help me find my way around the MELODIOUS GROVE and save my grandma!!!"];
+    const storyTexts = ["KI KI KI KI! WELCOME TO THE GOBLIN CAVE", 
+                       "When you are in,  you can never come out!!", 
+                        "I'll give a challenge for you missy, if you are able to get out of the cave", 
+                        "We will give u the stone mushroom.", 
+                        "I'll give you a hint: The louder it gets the closer you are to the outside", 
+                        "good luck HAHAHAH!"];
     let currentTextIndex = 0;
     let isTyping = false;
 
@@ -66,5 +67,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // controller for the button that will direct the user to the first minigame
 function handleHiddenButtonClick() {
-    window.location.href = '../transition_story/first_story.html';
+    window.location.href = '../minigame_maze/maze.html';
 }

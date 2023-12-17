@@ -23,11 +23,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // story here
-    const storyTexts = ["Hi, my name is Ari!", 
-                        "My grandma is dying and I need your help to save her.", 
-                        "I need to find the ingredients to make a magic potion that could heal her.",
-                        "But, the ingredients are hidden in the MELODIOUS GROVE, a mysterious forest that I've only heard of in stories!",
-                        "Please help me find my way around the MELODIOUS GROVE and save my grandma!!!"];
+    const storyTexts = ["Yay! We did it ! We are inside the forest now. Let's find the first ingredient: the stone mushroom!", 
+                       "Hmm, rumour has it that the it grows around the goblin cave, I wonder where is it..", 
+                        "OOOH!! AHHHHHH!!!!", 
+                        "Oh no! We fell down a hole. What should we do?"];
     let currentTextIndex = 0;
     let isTyping = false;
 
@@ -66,5 +65,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // controller for the button that will direct the user to the first minigame
 function handleHiddenButtonClick() {
-    window.location.href = '../transition_story/first_story.html';
+    window.location.href = 'second_storyp2.html';
 }

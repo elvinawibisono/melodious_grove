@@ -1,5 +1,4 @@
 
-
 window.onload = function () {
     const canvas = document.getElementById('audioCanvas');
     const ctx = canvas.getContext('2d');
@@ -65,13 +64,6 @@ window.onload = function () {
     
 
     document.body.appendChild(endImage);
-
-
-    // function drawImageAtPoint(point, image) {
-    //     // Assuming point has x and y properties
-    //     const imageSize = 20; // Set the size of the image
-    //     ctx.drawImage(image, point.x - imageSize / 2, point.y - imageSize / 2, imageSize, imageSize);
-    // }
 
     function startDrawing(e) {
         isDrawing = true;
@@ -206,6 +198,7 @@ window.onload = function () {
         return wave;
     }
 
+
    
 
 
@@ -261,7 +254,8 @@ window.onload = function () {
     
         if (path[path.length-1].x - path[0].x >= 600 && percentageWithinRange >= winThresholdPercentage) {
             console.log('Congratulations! You won!');
-            window.alert("you won!")
+            // window.alert("you won!")
+            document.getElementById('nextGamePopup').style.display = 'block';
             // You can add additional logic here for winning actions.
         } else {
             console.log('Sorry, you lost. The drawing deviates too much from the reference wave.');

@@ -31,12 +31,52 @@
             object-fit: cover;
             z-index: -1; 
         }
+
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        #nextGamePopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
         
 
     </style>
 </head>
 <body>
     <img id="background-image" src="../assets/grass_template2.jpg" alt="Background Image">
+
+    <div id="popup">
+        <p>To go to MELODIOUS GROVE there is a specific route to take. If followed correctly, the route generates the perfect pitch and we can enter MELODIOUS GROVE! 
+            Trace the road to go to the MELODIOUS GROVE. Make sure you are within the road and not go out the road! </p>
+        <button onclick="startGame()">Continue</button>
+    </div>
+
+    <!-- Add this to your HTML file -->
+    <div id="nextGamePopup" style="display: none;">
+        <p>Congratulations! You won! Click below to start the next game:</p>
+        <button onclick="startNextGame()">Next Game</button>
+    </div>
+
+
     <canvas id="audioCanvas" width="1000" height="500"></canvas>
     <!-- <script src="https://cdn.jsdelivr.net/npm/tonal/browser/tonal.min.js"></script> -->
 

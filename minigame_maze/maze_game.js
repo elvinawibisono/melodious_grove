@@ -137,7 +137,8 @@ function create() {
    
 
 
-    player = this.physics.add.sprite(centerX, centerY, 'girl');
+    // player = this.physics.add.sprite(centerX, centerY, 'girl');
+    player = this.physics.add.sprite(673, 1173, 'girl');
     player.setOrigin(0.5);
     player.setScale(2);
     // player.setBounce(0.2);
@@ -247,56 +248,10 @@ function create() {
         rays.push(ray);
     }
 
-    // // Integrate flashlight from RevealLightScene
-    // const x = 400;
-    // const y = 300;
-
-    // flashlightReveal = this.add.image(x, y, 'path_cross');
-    // flashlightCover = this.add.image(x, y, 'path_cross');
-    // flashlightCover.setTint(0x004c99);
-
-    // const width = flashlightCover.width;
-    // const height = flashlightCover.height;
-
-    // const renderTexture = this.make.renderTexture({
-    //     width,
-    //     height,
-    //     add: false
-    // });
-
-    // maskImage = this.make.image({
-    //     x,
-    //     y,
-    //     key: renderTexture.texture.key,
-    //     add: false
-    // });
-
-    // flashlightCover.mask = new Phaser.Display.Masks.BitmapMask(this, maskImage);
-    // flashlightCover.mask.invertAlpha = true;
-
-    // flashlightReveal.mask = new Phaser.Display.Masks.BitmapMask(this, maskImage);
-
-    // flashlight = this.add.circle(0, 0, 30, 0x000000, 1);
-    // flashlight.visible = false;
-
-    // this.flashlightElements = {
-    //     flashlightReveal,
-    //     flashlightCover,
-    //     renderTexture,
-    //     maskImage
-    // };
-
-
-
 }
 
 function update (){
-    // if (gameOver)
-    // {
-    //     return;
-    // }
 
-   
     if (cursors.left.isDown)
     {
         player.setVelocityX(-160);
@@ -337,37 +292,6 @@ function update (){
     circle.x = player.x;
     circle.y = player.y;
 
-
-    // circle.clear();
-    // circle.fillStyle(0xffffff, 0); // white color, fully opaque
-    // circle.fillCircle(0, 0, 200); // adjust the radius as needed
-    // circle.generateTexture('flashlightMask', 400, 400); // generate a texture for the circle
-    // this.cameras.main.mask = new Phaser.Display.Masks.BitmapMask(this, 'flashlightMask');
-
-
-
-    // this.children.removeAll(true);
-
-    
-
-    // Update rays based on the player's position
-    // for (let i = 0; i < rays.length; i++) {
-    //     const radians = Phaser.Math.DegToRad(i);
-    //     rays[i].x1 = player.x;
-    //     rays[i].y1 = player.y;
-    //     rays[i].x2 = player.x + Math.cos(radians) * 1000;
-    //     rays[i].y2 = player.y + Math.sin(radians) * 1000;
-    // }
-
-    // Draw the flashlight
-    // const { flashlightReveal, flashlightCover, renderTexture, maskImage } = this.flashlightElements;
-
-    // const x = player.x - flashlightCover.x + flashlightCover.width * 0.5;
-    // const y = player.y - flashlightCover.y + flashlightCover.height * 0.5;
-
-    // renderTexture.clear();
-    // renderTexture.draw(flashlight, x, y);
-
     console.log(maze[3][0])
 
     destination = maze[3][0]
@@ -402,23 +326,26 @@ function update (){
 
     if (maze[playerRow][playerCol] === "end" && !reachedEnd) {
         reachedEnd = true;
-        window.alert('Congratulations! You reached the end of the maze!');
-        player.setPosition(startX + playerCol * tileSize + tileSize / 2, startY + playerRow * tileSize + tileSize / 2);
+        // window.alert('Congratulations! You reached the end of the maze!');
+        // player.setPosition(startX + playerCol * tileSize + tileSize / 2, startY + playerRow * tileSize + tileSize / 2);
+        document.getElementById('nextGamePopup').style.display = 'block';
     }
 }
 
 
-
-
-
-function getRayIntersection(ray) {
-    const hitWalls = wallsGroup.getChildren().filter(wall => Phaser.Geom.Intersects.LineToRectangle(ray, wall.getBounds()));
-    if (hitWalls.length > 0) {
-        const bounds = hitWalls[0].getBounds();
-        const center = { x: bounds.centerX, y: bounds.centerY };
-        return center;
-    } else {
-        return null;
-    }
-
+function startNextGame() {
+    window.location.href = '../transition_story/first_story.html';
 }
+
+
+// function getRayIntersection(ray) {
+//     const hitWalls = wallsGroup.getChildren().filter(wall => Phaser.Geom.Intersects.LineToRectangle(ray, wall.getBounds()));
+//     if (hitWalls.length > 0) {
+//         const bounds = hitWalls[0].getBounds();
+//         const center = { x: bounds.centerX, y: bounds.centerY };
+//         return center;
+//     } else {
+//         return null;
+//     }
+
+// }
